@@ -13,6 +13,7 @@ from app.workflow.query import (
     RangeQueryResolver,
     SelectionCommandParser,
 )
+from app.workflow.data_exporter import DataExporter, data_exporter
 from app.workflow.session_pipeline import ColumnResolver, SessionPipeline
 from app.workflow.solvers import CrossSourceSolver, SeriesSolver
 from app.workflow.source_binding import (
@@ -34,11 +35,13 @@ __all__ = [
     "Source",
     "Charts",
     "CombinedSources",
+    "DataExporter",
     "analysis_tools",
     "bind_sources",
     "charts",
     "combine_as_source",
     "combine_sources",
+    "data_exporter",
     "source",
     "GeoQueryResolver",
     "GisQueryResolver",
