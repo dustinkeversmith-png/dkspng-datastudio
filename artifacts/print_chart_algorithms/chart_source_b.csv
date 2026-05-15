@@ -1,0 +1,5 @@
+year,county,state,latitude,longitude,metric_name,metric_value,category,heat_x,heat_y,heat_z,source,target,value
+2019,Lane,OR,44.06,-123.09,fire,12,A,1,1,12,ignition,response,8
+2020,Deschutes,OR,44.06,-121.31,fire,25,C,1,2,25,response,mitigation,6
+2021,Multnomah,OR,45.52,-122.67,fire,30,B,2,1,30,ignition,recovery,9
+2022,Jackson,OR,42.34,-122.88,other,18,B,2,2,18,recovery,mitigation,3

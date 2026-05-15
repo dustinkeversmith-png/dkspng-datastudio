@@ -1,0 +1,39 @@
+---
+title: "Regional Data Studio Report"
+output: html_document
+params:
+  csv_path: NULL
+---
+
+```{r setup, include=FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+df <- read_csv(params$csv_path, show_col_types = FALSE)
+```
+
+# Dataset Summary
+
+```{r}
+glimpse(df)
+```
+
+# County Counts
+
+```{r}
+df %>%
+  count(county, sort = TRUE)
+```
+
+# Metric Trend
+
+```{r}
+if ("year" %in% names(df) && "metric_value" %in% names(df)) {
+  df %>%
+    filter(!is.na(year), !is.na(metric_value)) %>%
+    ggplot(aes(x = year, y = metric_value)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE)
+}
+```
