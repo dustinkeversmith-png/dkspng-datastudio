@@ -1,0 +1,106 @@
+"""
+Python module to query Tech Workforce, H-1B Visa data, and integrate
+with regional hazard datasets (NIFC, NWS, Census) to export CSV tables.
+"""
+
+from __future__ import annotations
+from app.schemas import SourceDefinition
+from app.source_registry import add_or_update_source
+from app.workflow import data_exporter, source
+from app.examples.wilfire_hazard_exporter import register_hazard_sources
+
+def register_workforce_sources() -> None:
+    """Register labor market, job posting, and visa utilization sources."""
+    
+    # 1. EMSI Labor Market Data (Demand & Posting Metrics)
+    add_or_update_source(
+        SourceDefinition(
+            source_key="emsi_labor_postings",
+            display_name="EMSI Labor Postings API",
+            category="labor_market",
+            connector_type="web_api",
+            source_url="https://jsonplaceholder.typicode.com/posts", # Mock JSON URL for demonstration
+            notes="Proprietary data aggregator. Requires OAuth 2.0. Used for p19_table_01."
+        )
+    )
+
+    # 2. US Dept. of Labor - H-1B Records
+    add_or_update_source(
+        SourceDefinition(
+            source_key="dol_h1b_records",
+            display_name="DoL H-1B Disclosure Data",
+            category="labor_market",
+            connector_type="csv",
+            source_url="https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv", # Representative Mock CSV
+            requires_download=True,
+            notes="Yearly CSV direct download mock. Used for p22_table_01."
+        )
+    )
+
+
+def export_tech_workforce_data() -> None:
+    """Fetch and export tech workforce tables alongside hazard datasets."""
+    print("Registering Workforce and Hazard sources...")
+    register_workforce_sources()
+    # Pull in NIFC, Census TIGER, and NWS sources from the hazard example
+    register_hazard_sources()
+    
+    exporter = data_exporter()
+
+    # --- ACTION 1: EMSI Labor Postings (p19_table_01) ---
+    print("Fetching Labor Postings data (EMSI)...")
+    emsi = source("emsi_labor_postings")
+    try:
+        # Typically you'd apply .where() or similar to filter for "Software/IT" (SOC codes)
+        rows_emsi = emsi.fetch(limit=10)
+        print(f"Retrieved {len(rows_emsi)} EMSI records. Exporting to CSV...")
+        exporter.to_csv(emsi, "data/p19_table_01_emsi_postings.csv", rows=rows_emsi)
+    except Exception as e:
+        print(f"Could not parse emsi_labor_postings (expected if OAuth is missing/dummy URL): {e}")
+
+    # --- ACTION 2: DoL H-1B Records (p22_table_01) ---
+    print("\nFetching H-1B Records data (DoL)...")
+    h1b = source("dol_h1b_records")
+    try:
+        rows_h1b = h1b.fetch(limit=100)
+        print(f"Retrieved {len(rows_h1b)} H-1B records. Exporting to CSV...")
+        exporter.to_csv(h1b, "data/p22_table_01_h1b_visas.csv", rows=rows_h1b)
+    except Exception as e:
+        print(f"Could not parse dol_h1b_records (expected if URL is a placeholder/404): {e}")
+
+    # --- ACTION 3: NIFC Wildfire Aggregate Stats (p17_table_02) ---
+    print("\nFetching Wildfire Incident data (NIFC)...")
+    nifc = source("nifc_wildfire_incidents")
+    try:
+        # Pushing a mock 'where' clause down to profile just for tracking
+        nifc.where("GACC = 'Northwest'")
+        rows_nifc = nifc.fetch(limit=500)
+        print(f"Retrieved {len(rows_nifc)} NIFC records. Exporting to CSV...")
+        exporter.to_csv(nifc, "data/p17_table_02_wildfire_stats.csv", rows=rows_nifc)
+    except Exception as e:
+        print(f"Could not parse nifc_wildfire_incidents: {e}")
+
+    # --- ACTION 4: NWS Weather / Gridpoints ---
+    print("\nFetching NWS Weather data...")
+    nws = source("nws_forecast")
+    try:
+        rows_nws = nws.fetch(limit=10)
+        print(f"Retrieved {len(rows_nws)} NWS records. Exporting to CSV...")
+        exporter.to_csv(nws, "data/weather_risk_data.csv", rows=rows_nws)
+    except Exception as e:
+        print(f"Could not parse nws_forecast: {e}")
+
+    # --- ACTION 5: US Census (TIGER) Spatial Join ---
+    print("\nFetching Census Spatial data...")
+    census = source("census_tiger_boundaries")
+    try:
+        rows_census = census.fetch(limit=100)
+        print(f"Retrieved {len(rows_census)} Census tracts. Exporting to CSV...")
+        exporter.to_csv(census, "data/spatial_join_boundaries.csv", rows=rows_census)
+    except Exception as e:
+        print(f"Could not parse census_tiger_boundaries: {e}")
+
+    print("\nTech Workforce and Hazard data export complete!")
+
+if __name__ == "__main__":
+    export_tech_workforce_data()

@@ -9,6 +9,7 @@ class SourceDefinition(BaseModel):
     category: str
     connector_type: str
     source_url: str
+    requires_download: bool = False
     notes: str | None = None
     latitude_fields: list[str] = Field(default_factory=lambda: ["latitude", "lat", "y"])
     longitude_fields: list[str] = Field(default_factory=lambda: ["longitude", "lon", "lng", "x"])
@@ -64,6 +65,7 @@ class SourceRegistryUpsertRequest(BaseModel):
     category: str
     connector_type: str
     source_url: str
+    requires_download: bool = False
     notes: str | None = None
     latitude_fields: list[str] = Field(default_factory=lambda: ["latitude", "lat", "y"])
     longitude_fields: list[str] = Field(default_factory=lambda: ["longitude", "lon", "lng", "x"])

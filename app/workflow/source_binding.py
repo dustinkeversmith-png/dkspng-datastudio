@@ -45,13 +45,23 @@ if TYPE_CHECKING:
 
 def source(
     key: str,
-    url: str,
+    url: str | None = None,
     *,
     pipeline: SessionPipeline | None = None,
     geo: GeoQueryResolver | None = None,
     column_hints: list[str] | None = None,
     connector_type: str | None = None,
 ) -> Source:
+    if url is None:
+        from app.source_registry import get_source
+        try:
+            definition = get_source(key)
+            url = definition.source_url
+            if connector_type is None:
+                connector_type = definition.connector_type
+        except KeyError:
+            raise ValueError(f"url must be provided if source {key} is not registered")
+
     return Source(
         key,
         url,
@@ -270,6 +280,10 @@ class Source:
 
     def search(self, text: str, *, source_keys: list[str] | None = None) -> Source:
         self._apply_profile_patch({"search": text.strip()}, source_keys=source_keys)
+        return self
+
+    def where(self, clause: str, *, source_keys: list[str] | None = None) -> Source:
+        self._apply_profile_patch({"where": clause.strip()}, source_keys=source_keys)
         return self
 
     def in_county(self, county: str, *, source_keys: list[str] | None = None) -> Source:
@@ -798,6 +812,15 @@ def _filter_rows(rows: list[dict[str, Any]], profile: dict[str, Any]) -> list[di
             continue
         if profile.get("year_max") is not None and (year is None or year > float(profile["year_max"])):
             continue
+        if profile.get("where"):
+            clause = profile["where"]
+            if "=" in clause:
+                left, right = clause.split("=", 1)
+                left = left.strip()
+                right = right.strip().strip("'").strip('"')
+                val = row.get(left)
+                if val is not None and str(val).strip() != right:
+                    continue
         metric_value = _row_float(row, "metric_value", "value", "count", "esttotalacres", "protected_acres", "ANNUAL_COS", "REPAIR_COS")
         if profile.get("metric_value_min") is not None and (
             metric_value is None or metric_value < float(profile["metric_value_min"])
