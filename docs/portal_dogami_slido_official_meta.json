@@ -1,0 +1,370 @@
+{
+ "currentVersion": 11.5,
+ "cimVersion": "3.5.0",
+ "id": 0,
+ "name": "Historic Landslide Records (points)",
+ "type": "Feature Layer",
+ "description": "A compilation of center points of published or known historical (roughly 1849-2011 in Oregon) landslides. See Background page for more source information.\n",
+ "geometryType": "esriGeometryPoint",
+ "sourceSpatialReference": {
+  "wkid": 2994,
+  "latestWkid": 2994,
+  "xyTolerance": 0.0032808398950131233,
+  "zTolerance": 0.001,
+  "mTolerance": 0.001,
+  "falseX": -118489100,
+  "falseY": -97381100,
+  "xyUnits": 3.7592196316242374E7,
+  "falseZ": -100000,
+  "zUnits": 10000,
+  "falseM": -100000,
+  "mUnits": 10000
+ },
+ "spatialReference": {
+  "wkid": 102100,
+  "latestWkid": 3857,
+  "xyTolerance": 0.001,
+  "zTolerance": 0.001,
+  "mTolerance": 0.001,
+  "falseX": -20037700,
+  "falseY": -30241100,
+  "xyUnits": 1.4892314192838538E8,
+  "falseZ": -100000,
+  "zUnits": 10000,
+  "falseM": -100000,
+  "mUnits": 10000
+ },
+ "copyrightText": "",
+ "parentLayer": null,
+ "subLayers": [],
+ "minScale": 0,
+ "maxScale": 0,
+ "drawingInfo": {
+  "renderer": {
+   "type": "simple",
+   "symbol": {
+    "type": "esriSMS",
+    "style": "esriSMSCircle",
+    "color": [
+     245,
+     245,
+     123,
+     255
+    ],
+    "size": 4,
+    "angle": 0,
+    "xoffset": 0,
+    "yoffset": 0,
+    "outline": {
+     "color": [
+      0,
+      0,
+      0,
+      255
+     ],
+     "width": 1
+    }
+   }
+  },
+  "scaleSymbols": false,
+  "transparency": 0,
+  "labelingInfo": null
+ },
+ "defaultVisibility": false,
+ "extent": {
+  "xmin": -1.3883341409346065E7,
+  "ymin": 5150398.536848098,
+  "xmax": -1.3002507805907706E7,
+  "ymax": 5824193.874500725,
+  "spatialReference": {
+   "wkid": 102100,
+   "latestWkid": 3857,
+   "xyTolerance": 0.001,
+   "zTolerance": 0.001,
+   "mTolerance": 0.001,
+   "falseX": -20037700,
+   "falseY": -30241100,
+   "xyUnits": 1.4892314192838538E8,
+   "falseZ": -100000,
+   "zUnits": 10000,
+   "falseM": -100000,
+   "mUnits": 10000
+  }
+ },
+ "hasAttachments": false,
+ "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+ "displayField": "SLIDE_NAME",
+ "typeIdField": null,
+ "subtypeFieldName": null,
+ "subtypeField": null,
+ "defaultSubtypeCode": null,
+ "fields": [
+  {
+   "name": "Shape",
+   "type": "esriFieldTypeGeometry",
+   "alias": "Shape",
+   "domain": null
+  },
+  {
+   "name": "REF_ID_COD",
+   "type": "esriFieldTypeString",
+   "alias": "REF_ID_COD",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "UNIQUE_ID",
+   "type": "esriFieldTypeString",
+   "alias": "UNIQUE_ID",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "DATA_SOURC",
+   "type": "esriFieldTypeString",
+   "alias": "DATA_SOURC",
+   "length": 100,
+   "domain": null
+  },
+  {
+   "name": "LOC_METHOD",
+   "type": "esriFieldTypeString",
+   "alias": "LOC_METHOD",
+   "length": 100,
+   "domain": null
+  },
+  {
+   "name": "ORIG_ID",
+   "type": "esriFieldTypeString",
+   "alias": "ORIG_ID",
+   "length": 25,
+   "domain": null
+  },
+  {
+   "name": "SLIDE_NAME",
+   "type": "esriFieldTypeString",
+   "alias": "SLIDE_NAME",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "LENGTH_ft",
+   "type": "esriFieldTypeSingle",
+   "alias": "LENGTH_ft",
+   "domain": null
+  },
+  {
+   "name": "WIDTH_ft",
+   "type": "esriFieldTypeSingle",
+   "alias": "WIDTH_ft",
+   "domain": null
+  },
+  {
+   "name": "DEPTH_ft",
+   "type": "esriFieldTypeSingle",
+   "alias": "DEPTH_ft",
+   "domain": null
+  },
+  {
+   "name": "SLOPE",
+   "type": "esriFieldTypeSingle",
+   "alias": "SLOPE",
+   "domain": null
+  },
+  {
+   "name": "TYPE_MOVE",
+   "type": "esriFieldTypeString",
+   "alias": "TYPE_MOVE",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "MOVE_CLASS",
+   "type": "esriFieldTypeString",
+   "alias": "MOVE_CLASS",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "CONTR_FACT",
+   "type": "esriFieldTypeString",
+   "alias": "CONTR_FACT",
+   "length": 100,
+   "domain": null
+  },
+  {
+   "name": "TYPE_MTRL",
+   "type": "esriFieldTypeString",
+   "alias": "TYPE_MTRL",
+   "length": 25,
+   "domain": null
+  },
+  {
+   "name": "AREA_ft2",
+   "type": "esriFieldTypeSingle",
+   "alias": "AREA_ft2",
+   "domain": null
+  },
+  {
+   "name": "VOLUME_ft3",
+   "type": "esriFieldTypeSingle",
+   "alias": "VOLUME_ft3",
+   "domain": null
+  },
+  {
+   "name": "DEEP_SHAL",
+   "type": "esriFieldTypeString",
+   "alias": "DEEP_SHAL",
+   "length": 25,
+   "domain": null
+  },
+  {
+   "name": "DAMAGES",
+   "type": "esriFieldTypeString",
+   "alias": "DAMAGES",
+   "length": 254,
+   "domain": null
+  },
+  {
+   "name": "LOSSES",
+   "type": "esriFieldTypeString",
+   "alias": "LOSSES",
+   "length": 50,
+   "domain": null
+  },
+  {
+   "name": "COMMENTS",
+   "type": "esriFieldTypeString",
+   "alias": "COMMENTS",
+   "length": 254,
+   "domain": null
+  },
+  {
+   "name": "YEAR",
+   "type": "esriFieldTypeInteger",
+   "alias": "YEAR",
+   "domain": null
+  },
+  {
+   "name": "DATE_RANGE",
+   "type": "esriFieldTypeString",
+   "alias": "DATE_RANGE",
+   "length": 25,
+   "domain": null
+  },
+  {
+   "name": "MONTH",
+   "type": "esriFieldTypeString",
+   "alias": "MONTH",
+   "length": 2,
+   "domain": null
+  },
+  {
+   "name": "DAY",
+   "type": "esriFieldTypeString",
+   "alias": "DAY",
+   "length": 2,
+   "domain": null
+  },
+  {
+   "name": "FID",
+   "type": "esriFieldTypeOID",
+   "alias": "FID",
+   "domain": null
+  },
+  {
+   "name": "ANNUAL_COS",
+   "type": "esriFieldTypeSingle",
+   "alias": "ANNUAL_COS",
+   "domain": null
+  },
+  {
+   "name": "REPAIR_COS",
+   "type": "esriFieldTypeSingle",
+   "alias": "REPAIR_COS",
+   "domain": null
+  },
+  {
+   "name": "REACTIVATI",
+   "type": "esriFieldTypeString",
+   "alias": "REACTIVATI",
+   "length": 50,
+   "domain": null
+  }
+ ],
+ "geometryField": {
+  "name": "Shape",
+  "type": "esriFieldTypeGeometry",
+  "alias": "Shape"
+ },
+ "indexes": [
+  {
+   "name": "Shape",
+   "fields": "Shape",
+   "isAscending": true,
+   "isUnique": false,
+   "description": ""
+  }
+ ],
+ "subtypes": [],
+ "relationships": [],
+ "canModifyLayer": true,
+ "canScaleSymbols": false,
+ "hasLabels": false,
+ "capabilities": "Map,Query,Data",
+ "maxRecordCount": 1000,
+ "maxSelectionCount": 2000,
+ "supportsStatistics": false,
+ "supportsExceedsLimitStatistics": false,
+ "supportsAdvancedQueries": false,
+ "supportedQueryFormats": "JSON, geoJSON, PBF",
+ "isDataVersioned": false,
+ "ownershipBasedAccessControlForFeatures": {"allowOthersToQuery": true},
+ "useStandardizedQueries": true,
+ "supportedSpatialRelationships": [
+  "esriSpatialRelIntersects",
+  "esriSpatialRelContains",
+  "esriSpatialRelCrosses",
+  "esriSpatialRelEnvelopeIntersects",
+  "esriSpatialRelIndexIntersects",
+  "esriSpatialRelOverlaps",
+  "esriSpatialRelTouches",
+  "esriSpatialRelWithin",
+  "esriSpatialRelRelation"
+ ],
+ "advancedQueryCapabilities": {
+  "useStandardizedQueries": true,
+  "supportsStatistics": false,
+  "supportsPercentileStatistics": false,
+  "supportsHavingClause": false,
+  "supportsOrderBy": false,
+  "supportsDistinct": false,
+  "supportsCountDistinct": false,
+  "supportsAdvancedQueryRelated": true,
+  "supportsQueryRelatedPagination": true,
+  "supportsPagination": false,
+  "supportsLod": false,
+  "supportsQueryWithLodSR": false,
+  "supportsTrueCurve": true,
+  "supportsQueryWithDatumTransformation": true,
+  "supportsReturningQueryExtent": true,
+  "supportsQueryWithDistance": true,
+  "supportsSqlExpression": false,
+  "supportsTimeRelation": true,
+  "supportsSqlFormat": false,
+  "supportsQueryAnalytic": false,
+  "supportsCurrentUserQueries": true
+ },
+ "supportsDatumTransformation": true,
+ "dateFieldsTimeReference": null,
+ "preferredTimeReference": null,
+ "datesInUnknownTimezone": false,
+ "hasMetadata": false,
+ "isDataArchived": false,
+ "archivingInfo": {
+  "supportsQueryWithHistoricMoment": false,
+  "startArchivingMoment": -1
+ },
+ "supportsCoordinatesQuantization": true,
+ "supportsDynamicLegends": true
+}

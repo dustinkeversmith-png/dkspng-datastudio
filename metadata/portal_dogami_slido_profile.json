@@ -1,0 +1,257 @@
+{
+  "source_key": "portal_dogami_slido",
+  "source_url": "https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0/query",
+  "documentation_url": "https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0?f=pjson",
+  "fetch_timestamp": "2026-05-16T02:26:30.581192",
+  "row_count": 18,
+  "columns": [
+    {
+      "name": "REF_ID_COD",
+      "inferred_type": "string",
+      "inferred_unit_tag": "unique_identifier",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "REF_ID_COD"
+    },
+    {
+      "name": "UNIQUE_ID",
+      "inferred_type": "string",
+      "inferred_unit_tag": "unique_identifier",
+      "null_count": 0,
+      "unique_values": 18,
+      "human_description": "UNIQUE_ID"
+    },
+    {
+      "name": "DATA_SOURC",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "DATA_SOURC"
+    },
+    {
+      "name": "LOC_METHOD",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "LOC_METHOD"
+    },
+    {
+      "name": "ORIG_ID",
+      "inferred_type": "string",
+      "inferred_unit_tag": "unique_identifier",
+      "null_count": 0,
+      "unique_values": 18,
+      "human_description": "ORIG_ID"
+    },
+    {
+      "name": "SLIDE_NAME",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "SLIDE_NAME"
+    },
+    {
+      "name": "LENGTH_ft",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "ft",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "LENGTH_ft"
+    },
+    {
+      "name": "WIDTH_ft",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "ft",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "WIDTH_ft"
+    },
+    {
+      "name": "DEPTH_ft",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "ft",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "DEPTH_ft"
+    },
+    {
+      "name": "SLOPE",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "slope",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "SLOPE"
+    },
+    {
+      "name": "TYPE_MOVE",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "TYPE_MOVE"
+    },
+    {
+      "name": "MOVE_CLASS",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "MOVE_CLASS"
+    },
+    {
+      "name": "CONTR_FACT",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "CONTR_FACT"
+    },
+    {
+      "name": "TYPE_MTRL",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "TYPE_MTRL"
+    },
+    {
+      "name": "AREA_ft2",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "ft2",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "AREA_ft2"
+    },
+    {
+      "name": "VOLUME_ft3",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "ft3",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "VOLUME_ft3"
+    },
+    {
+      "name": "DEEP_SHAL",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "DEEP_SHAL"
+    },
+    {
+      "name": "DAMAGES",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 7,
+      "human_description": "DAMAGES"
+    },
+    {
+      "name": "LOSSES",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "LOSSES"
+    },
+    {
+      "name": "COMMENTS",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 18,
+      "human_description": "COMMENTS"
+    },
+    {
+      "name": "YEAR",
+      "inferred_type": "datetime",
+      "inferred_unit_tag": "temporal",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "YEAR"
+    },
+    {
+      "name": "DATE_RANGE",
+      "inferred_type": "datetime",
+      "inferred_unit_tag": "temporal",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "DATE_RANGE"
+    },
+    {
+      "name": "MONTH",
+      "inferred_type": "datetime",
+      "inferred_unit_tag": "temporal",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "MONTH"
+    },
+    {
+      "name": "DAY",
+      "inferred_type": "datetime",
+      "inferred_unit_tag": "temporal",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "DAY"
+    },
+    {
+      "name": "FID",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "unique_identifier",
+      "null_count": 0,
+      "unique_values": 18,
+      "human_description": "FID"
+    },
+    {
+      "name": "ANNUAL_COS",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 12,
+      "human_description": "ANNUAL_COS"
+    },
+    {
+      "name": "REPAIR_COS",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 14,
+      "human_description": "REPAIR_COS"
+    },
+    {
+      "name": "REACTIVATI",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": "REACTIVATI"
+    },
+    {
+      "name": "longitude",
+      "inferred_type": "float",
+      "inferred_unit_tag": "decimal_degrees",
+      "null_count": 0,
+      "unique_values": 18,
+      "human_description": null
+    },
+    {
+      "name": "latitude",
+      "inferred_type": "float",
+      "inferred_unit_tag": "decimal_degrees",
+      "null_count": 0,
+      "unique_values": 18,
+      "human_description": null
+    },
+    {
+      "name": "session_source_key",
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
+      "null_count": 0,
+      "unique_values": 1,
+      "human_description": null
+    }
+  ]
+}

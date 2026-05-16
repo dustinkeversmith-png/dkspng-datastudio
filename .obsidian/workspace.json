@@ -178,17 +178,20 @@
   },
   "active": "b2ee4da0d4fc1c16",
   "lastOpenFiles": [
-    "app/metadata_analyzer/__pycache__/analyzer.cpython-312.pyc.2401750913728",
-    "metadata/slido_profile.csv",
-    "metadata/slido_profile.md",
-    "metadata/slido_profile.json",
-    "metadata",
-    "app/examples/meta/__pycache__/slido_meta_example.cpython-312.pyc.2117849812112",
-    "app/metadata_analyzer/__pycache__/exporters.cpython-312.pyc",
-    "app/metadata_analyzer/__pycache__/analyzer.cpython-312.pyc",
-    "app/metadata_analyzer/__pycache__/analyzer.cpython-312.pyc.2065695022016",
-    "app/metadata_analyzer/__pycache__/__init__.cpython-312.pyc",
-    "app/metadata_analyzer/__pycache__/schemas.cpython-312.pyc",
-    "app/metadata_analyzer/__pycache__"
+    "metadata/portal_sci_data_ics209_demo_profile.csv",
+    "metadata/portal_sci_data_ics209_demo_profile.md",
+    "metadata/portal_sci_data_ics209_demo_profile.json",
+    "docs/portal_sci_data_ics209_demo_official_meta.txt",
+    "metadata/portal_dogami_slido_profile.csv",
+    "metadata/portal_dogami_slido_profile.md",
+    "metadata/portal_dogami_slido_profile.json",
+    "docs/portal_dogami_slido_official_meta.json",
+    "metadata/portal_odf_firestats_profile.csv",
+    "metadata/portal_odf_firestats_profile.md",
+    "metadata/portal_odf_firestats_profile.json",
+    "docs/portal_odf_firestats_official_meta.json",
+    "docs",
+    "app/metadata_finder/parsers/__pycache__/socrata.cpython-312.pyc",
+    "metadata/slido_profile.md"
   ]
 }

@@ -24,6 +24,8 @@ def export_to_markdown(profile: DatasetProfile, patch_data: List[Dict[str, Any]]
         f.write(f"# Data Identity Card: {profile.source_key}\n\n")
         f.write("## Source Lineage\n")
         f.write(f"- **URL**: {profile.source_url}\n")
+        if profile.documentation_url:
+            f.write(f"- **Documentation**: {profile.documentation_url}\n")
         f.write(f"- **Fetched At**: {profile.fetch_timestamp}\n")
         f.write(f"- **Patch Row Count**: {profile.row_count}\n\n")
         

@@ -18,13 +18,14 @@ class MetadataAnalyzer:
             except Exception as e:
                 print(f"Warning: Could not load context map from {context_map_path}. {e}")
 
-    def generate_profile(self, patch_data: List[Dict[str, Any]], human_overrides: Optional[Dict[str, str]] = None) -> DatasetProfile:
+    def generate_profile(self, patch_data: List[Dict[str, Any]], human_overrides: Optional[Dict[str, str]] = None, documentation_url: Optional[str] = None) -> DatasetProfile:
         human_overrides = human_overrides or {}
         
         if not patch_data:
             return DatasetProfile(
                 source_key=self.source_key,
                 source_url=self.source_url,
+                documentation_url=documentation_url,
                 fetch_timestamp=datetime.utcnow().isoformat(),
                 row_count=0,
                 columns=[]
@@ -104,6 +105,7 @@ class MetadataAnalyzer:
         return DatasetProfile(
             source_key=self.source_key,
             source_url=self.source_url,
+            documentation_url=documentation_url,
             fetch_timestamp=datetime.utcnow().isoformat(),
             row_count=total_rows,
             columns=column_profiles

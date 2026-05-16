@@ -12,6 +12,7 @@ class ColumnProfile(BaseModel):
 class DatasetProfile(BaseModel):
     source_key: str
     source_url: str
+    documentation_url: Optional[str] = None
     fetch_timestamp: str
     row_count: int
     columns: List[ColumnProfile]
