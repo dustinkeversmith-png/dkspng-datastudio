@@ -4,10 +4,6 @@
 2. Create an option for downloading data, waiting for the download [done]
 	1. Need to add web parsing, zip support, and exe support [backlog]
 
-
-
-
-
 3. After gathering all of the data devise a datatable "visualization schema"
 
 

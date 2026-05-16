@@ -19,8 +19,8 @@ def register_workforce_sources() -> None:
             display_name="EMSI Labor Postings API",
             category="labor_market",
             connector_type="web_api",
-            source_url="https://jsonplaceholder.typicode.com/posts", # Mock JSON URL for demonstration
-            notes="Proprietary data aggregator. Requires OAuth 2.0. Used for p19_table_01."
+            source_url="https://api.emsidata.com/postings/metrics",
+            notes="Proprietary data aggregator. Auth: OAuth 2.0. Query logic: ?occupationId={SOC}"
         )
     )
 
@@ -31,9 +31,9 @@ def register_workforce_sources() -> None:
             display_name="DoL H-1B Disclosure Data",
             category="labor_market",
             connector_type="csv",
-            source_url="https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv", # Representative Mock CSV
+            source_url="https://www.dol.gov/sites/dolgov/files/ETA/oflc/pdfs/LCA_Disclosure_Data_FY2023_Q4.csv",
             requires_download=True,
-            notes="Yearly CSV direct download mock. Used for p22_table_01."
+            notes="Yearly XLSX/CSV direct download links. Auth: None"
         )
     )
 
@@ -50,30 +50,36 @@ def export_tech_workforce_data() -> None:
     # --- ACTION 1: EMSI Labor Postings (p19_table_01) ---
     print("Fetching Labor Postings data (EMSI)...")
     emsi = source("emsi_labor_postings")
+    # Apply 50 miles from Klamath Falls constraint
+    emsi.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
+    # Query logic for SOC code (e.g. 15-0000 for Computer and Mathematical Occupations)
+    emsi.where("occupationId='15-0000'")
     try:
-        # Typically you'd apply .where() or similar to filter for "Software/IT" (SOC codes)
         rows_emsi = emsi.fetch(limit=10)
         print(f"Retrieved {len(rows_emsi)} EMSI records. Exporting to CSV...")
         exporter.to_csv(emsi, "data/p19_table_01_emsi_postings.csv", rows=rows_emsi)
     except Exception as e:
-        print(f"Could not parse emsi_labor_postings (expected if OAuth is missing/dummy URL): {e}")
+        print(f"Could not parse emsi_labor_postings: {e}")
 
     # --- ACTION 2: DoL H-1B Records (p22_table_01) ---
     print("\nFetching H-1B Records data (DoL)...")
     h1b = source("dol_h1b_records")
+    h1b.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
     try:
         rows_h1b = h1b.fetch(limit=100)
         print(f"Retrieved {len(rows_h1b)} H-1B records. Exporting to CSV...")
         exporter.to_csv(h1b, "data/p22_table_01_h1b_visas.csv", rows=rows_h1b)
     except Exception as e:
-        print(f"Could not parse dol_h1b_records (expected if URL is a placeholder/404): {e}")
+        print(f"Could not parse dol_h1b_records: {e}")
 
     # --- ACTION 3: NIFC Wildfire Aggregate Stats (p17_table_02) ---
     print("\nFetching Wildfire Incident data (NIFC)...")
     nifc = source("nifc_wildfire_incidents")
+    nifc.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
     try:
-        # Pushing a mock 'where' clause down to profile just for tracking
-        nifc.where("GACC = 'Northwest'")
+        # Applying filter logic from table: where=GACC='Northwest'&f=geojson
+        nifc.where("GACC='Northwest'")
+        nifc.where("f='geojson'")
         rows_nifc = nifc.fetch(limit=500)
         print(f"Retrieved {len(rows_nifc)} NIFC records. Exporting to CSV...")
         exporter.to_csv(nifc, "data/p17_table_02_wildfire_stats.csv", rows=rows_nifc)
@@ -83,6 +89,9 @@ def export_tech_workforce_data() -> None:
     # --- ACTION 4: NWS Weather / Gridpoints ---
     print("\nFetching NWS Weather data...")
     nws = source("nws_forecast")
+    nws.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
+    # Endpoint specifies /gridpoints/{office}/{gridX},{gridY}
+    nws.where("office='MFR'") # Medford office covers Klamath Falls
     try:
         rows_nws = nws.fetch(limit=10)
         print(f"Retrieved {len(rows_nws)} NWS records. Exporting to CSV...")
@@ -93,6 +102,10 @@ def export_tech_workforce_data() -> None:
     # --- ACTION 5: US Census (TIGER) Spatial Join ---
     print("\nFetching Census Spatial data...")
     census = source("census_tiger_boundaries")
+    census.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
+    # Endpoint specifies weblat={lat}&lon={lon}&layers=82&f=json
+    census.where("layers='82'")
+    census.where("f='json'")
     try:
         rows_census = census.fetch(limit=100)
         print(f"Retrieved {len(rows_census)} Census tracts. Exporting to CSV...")

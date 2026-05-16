@@ -19,7 +19,7 @@ def register_hazard_sources() -> None:
             category="natural_hazards",
             connector_type="arcgis_rest",
             source_url="https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations/FeatureServer/0/query",
-            notes="Primary source for IRWIN ID and active fire records."
+            notes="Query/Filter Logic: where=GACC='Northwest'&f=geojson. Auth: None"
         )
     )
 
@@ -29,9 +29,9 @@ def register_hazard_sources() -> None:
             source_key="census_tiger_boundaries",
             display_name="US Census TIGER/Line Boundaries",
             category="geospatial",
-            connector_type="arcgis_rest",
-            source_url="https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0/query",
-            notes="Working spatial endpoint proxy for Census Tracts."
+            connector_type="web_api",
+            source_url="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Current/MapServer/identify",
+            notes="Query/Filter Logic: weblat={lat}&lon={lon}&layers=82&f=json. Auth: None"
         )
     )
 
@@ -39,11 +39,11 @@ def register_hazard_sources() -> None:
     add_or_update_source(
         SourceDefinition(
             source_key="nws_forecast",
-            display_name="National Weather Service API (Alerts)",
+            display_name="National Weather Service API (Gridpoints)",
             category="weather",
             connector_type="web_api",
-            source_url="https://api.weather.gov/alerts/active",
-            notes="Requires a User-Agent header. Fetching active alerts JSON."
+            source_url="https://api.weather.gov/gridpoints/{office}/{gridX},{gridY}",
+            notes="Auth: User-Agent"
         )
     )
 
@@ -93,6 +93,7 @@ def export_wildfire_hazard_data() -> None:
     
     # We will let the connector pull the generic payload without an in-memory `where`
     # clause that would drop unmatching local records to 0. 
+    fire_source.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
     
     # Fetching rows with a limit suitable for regional analysis
     fire_rows = fire_source.fetch(limit=1000)
@@ -102,6 +103,7 @@ def export_wildfire_hazard_data() -> None:
     # --- ACTION 2: Export Census Spatial Linkages ---
     print("Fetching Census Spatial data for hazard linkage...")
     census_source = source("census_tiger_boundaries")
+    census_source.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
 
     census_rows = census_source.fetch(limit=500)
     print(f"Retrieved {len(census_rows)} Census tracts. Exporting to CSV...")
@@ -110,6 +112,7 @@ def export_wildfire_hazard_data() -> None:
     # --- ACTION 3: Export National Weather Service Forecast ---
     print("Fetching National Weather Service API data...")
     nws_source = source("nws_forecast")
+    nws_source.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
     try:
         nws_rows = nws_source.fetch(limit=10)
         print(f"Retrieved {len(nws_rows)} NWS forecast records. Exporting to CSV...")
@@ -120,6 +123,7 @@ def export_wildfire_hazard_data() -> None:
     # --- ACTION 4: Export NOAA Global Surface Summary ---
     print("Fetching NOAA GSOD data...")
     noaa_source = source("noaa_gsod")
+    noaa_source.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
     try:
         noaa_rows = noaa_source.fetch(limit=1000)
         print(f"Retrieved {len(noaa_rows)} NOAA GSOD records. Exporting to CSV...")
@@ -130,6 +134,7 @@ def export_wildfire_hazard_data() -> None:
     # --- ACTION 5: Export EPA Air Quality ---
     print("Fetching EPA Air Quality data...")
     epa_source = source("epa_air_quality")
+    epa_source.near({"lat": 42.2249, "lon": -121.7817}, "50mi", query_type="coordinates")
     try:
         epa_rows = epa_source.fetch(limit=100)
         print(f"Retrieved {len(epa_rows)} EPA Air Quality records. Exporting to CSV...")

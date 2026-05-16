@@ -1,5 +1,5 @@
 """
-Runnable demo for querying DOGAMI SLIDO 42 landslides near Grants Pass
+Runnable demo for querying DOGAMI SLIDO 42 landslides near Klamath Falls
 and exporting the results to CSV and JSON formats.
 
 Run (from repo root, PYTHONPATH=.): python -m app.examples.slido_exporter
@@ -32,8 +32,8 @@ def register_slido_source() -> None:
     )
 
 
-def export_slido_grants_pass() -> None:
-    """Query SLIDO for landslides within 50 miles of Grants Pass and export data."""
+def export_slido_klamath_falls() -> None:
+    """Query SLIDO for landslides within 50 miles of Klamath Falls and export data."""
     print("Registering SLIDO source...")
     register_slido_source()
 
@@ -46,11 +46,10 @@ def export_slido_grants_pass() -> None:
         ),
     )
 
-    # Filter for data near Grants Pass, OR within 50 miles
-    # We use explicit coordinates for Grants Pass to avoid potential geocoding issues
-    print("Setting up query for Grants Pass (within 50 miles)...")
+    # Filter for data near Klamath Falls, OR within 50 miles
+    print("Setting up query for Klamath Falls (within 50 miles)...")
     slido.near(
-        {"lat": 42.4391, "lon": -123.3284},
+        {"lat": 42.2249, "lon": -121.7817},
         "50mi",
         query_type="coordinates",
         coordinate_columns={"latitude": ["y", "POINT_Y"], "longitude": ["x", "POINT_X"]},
@@ -66,15 +65,15 @@ def export_slido_grants_pass() -> None:
     exporter = data_exporter()
 
     # Export to CSV
-    csv_path = "data/slido_grants_pass.csv"
+    csv_path = "data/slido_klamath_falls.csv"
     exporter.to_csv(slido, csv_path, rows=rows)
 
     # Export to JSON
-    json_path = "data/slido_grants_pass.json"
+    json_path = "data/slido_klamath_falls.json"
     exporter.to_json(slido, json_path, rows=rows)
 
     print("Done!")
 
 
 if __name__ == "__main__":
-    export_slido_grants_pass()
+    export_slido_klamath_falls()
