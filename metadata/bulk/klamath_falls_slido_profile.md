@@ -1,9 +1,8 @@
 # Data Identity Card: portal_dogami_slido
 
 ## Source Lineage
-- **URL**: https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0/query
-- **Documentation**: https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0?f=pjson
-- **Fetched At**: 2026-05-16T02:38:39.179350
+- **URL**: local://klamath_falls_slido.csv
+- **Fetched At**: 2026-05-16T02:57:13.537389
 - **Patch Row Count**: 18
 
 ## Column Index
@@ -48,4 +47,4 @@
 | ODOT2011 | LS_71 | Oregon Department of Transportation |   | SL004-0241-62RS1 |   | 0 | 0 | 0 | 0 |   | Rockfall |   |   | 0 | 0 |   | Road Impact:RF on roadway;Lanes Affected:1; |   |  Hwy Name:The Dalles-California; Hwy Number:004;Mile Post:241.62;Frequency:every yr;mitigated, no new history needed | 0 |   |   |   | 71 | 0.0 | 0.0 |   | -121.85937540563964 | 42.66927808001442 | portal_dogami_slido |
 | ODOT2011 | LS_72 | Oregon Department of Transportation |   | SL004-0241-80RS1 |   | 0 | 0 | 0 | 0 |   | Rockfall |   |   | 0 | 0 |   | Road Impact:RF on roadway;Lanes Affected:1; |   |  Hwy Name:The Dalles-California; Hwy Number:004;Mile Post:241.8;Frequency:every yr;mitigated, no new history needed | 0 |   |   |   | 72 | 0.0 | 0.0 |   | -121.86116029376414 | 42.66708187671151 | portal_dogami_slido |
 | ODOT2011 | LS_73 | Oregon Department of Transportation |   | SL004-0241-98RS1 |   | 0 | 0 | 0 | 0 |   | Rockfall |   |   | 0 | 0 |   | Road Impact:RF on roadway;Lanes Affected:2; |   |  Hwy Name:The Dalles-California; Hwy Number:004;Mile Post:241.98;Frequency:every yr;mitigated, no new history needed | 0 |   |   |   | 73 | 0.0 | 0.0 |   | -121.86403473989218 | 42.66577623103929 | portal_dogami_slido |
-| ODOT2011 | LS_74 | Oregon Department of Transportation |   | SL004-0242-34RS1 |   | 0 | 0 | 0 | 0 |   | Rockfall |   |   | 0 | 0 |   | Road Impact:RF on roadway;Lanes Affected:2; |   |  Hwy Name:The Dalles-California; Hwy Number:004;Mile Post:242.34;Frequency:every yr;mitigated, no new history needed | 0 |   |   |   | 74 | 0.0 | 0.0 |   | -121.87094426126019 | 42.66511474569281 | portal_dogami_slido |
+| ODOT2011 | LS_74 | Oregon Department of Transportation |   | SL004-0242-34RS1 |   | 0 | 0 | 0 | 0 |   | Rockfall |   |   | 0 | 0 |   | Road Impact:RF on roadway;Lanes Affected:2; |   |  Hwy Name:The Dalles-California; Hwy Number:004;Mile Post:242.34;Frequency:every yr;mitigated, no new history needed | 0 |   |   |   | 74 | 0.0 | 0.0 |   | -121.8709442612602 | 42.66511474569281 | portal_dogami_slido |

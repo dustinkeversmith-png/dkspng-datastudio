@@ -18,8 +18,7 @@ class MetadataAnalyzer:
             except Exception as e:
                 print(f"Warning: Could not load context map from {context_map_path}. {e}")
 
-    def generate_profile(self, patch_data: List[Dict[str, Any]], human_overrides: Optional[Dict[str, str]] = None, documentation_url: Optional[str] = None) -> DatasetProfile:
-        human_overrides = human_overrides or {}
+    def generate_profile(self, patch_data: List[Dict[str, Any]], documentation_url: Optional[str] = None) -> DatasetProfile:
         
         if not patch_data:
             return DatasetProfile(
@@ -90,8 +89,8 @@ class MetadataAnalyzer:
                 if num_count == len(non_null_values):
                     inferred_type = "numeric"
 
-            # Human Description
-            human_desc = human_overrides.get(col) or self.context_map.get(col)
+            # Internal baseline description
+            human_desc = self.context_map.get(col)
 
             column_profiles.append(ColumnProfile(
                 name=col,

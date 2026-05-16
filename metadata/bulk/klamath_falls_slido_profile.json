@@ -1,8 +1,8 @@
 {
   "source_key": "portal_dogami_slido",
-  "source_url": "https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0/query",
-  "documentation_url": "https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0?f=pjson",
-  "fetch_timestamp": "2026-05-16T02:38:39.179350",
+  "source_url": "local://klamath_falls_slido.csv",
+  "documentation_url": null,
+  "fetch_timestamp": "2026-05-16T02:57:13.537389",
   "row_count": 18,
   "columns": [
     {

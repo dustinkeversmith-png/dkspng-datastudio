@@ -30,8 +30,8 @@ def register_hazard_sources() -> None:
             display_name="US Census TIGER/Line Boundaries",
             category="geospatial",
             connector_type="web_api",
-            source_url="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Current/MapServer/identify",
-            notes="Query/Filter Logic: weblat={lat}&lon={lon}&layers=82&f=json. Auth: None"
+            source_url="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Current/MapServer/identify?f=json&geometryType=esriGeometryPoint&geometry=-121.7817,42.2249&sr=4326&layers=all&tolerance=2&mapExtent=-122,42,-121,43&imageDisplay=800,600,96",
+            notes="Query/Filter Logic used correctly. Auth: None"
         )
     )
 
@@ -42,7 +42,7 @@ def register_hazard_sources() -> None:
             display_name="National Weather Service API (Gridpoints)",
             category="weather",
             connector_type="web_api",
-            source_url="https://api.weather.gov/gridpoints/{office}/{gridX},{gridY}",
+            source_url="https://api.weather.gov/points/42.2249,-121.7817",
             notes="Auth: User-Agent"
         )
     )

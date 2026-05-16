@@ -1,0 +1,161 @@
+{
+  "source_key": "portal_odf_firestats",
+  "extracted_fields": [
+    {
+      "field_name": "serial",
+      "human_description": ""
+    },
+    {
+      "field_name": "firecategory",
+      "human_description": ""
+    },
+    {
+      "field_name": "fireyear",
+      "human_description": ""
+    },
+    {
+      "field_name": "area",
+      "human_description": ""
+    },
+    {
+      "field_name": "districtname",
+      "human_description": ""
+    },
+    {
+      "field_name": "unitname",
+      "human_description": ""
+    },
+    {
+      "field_name": "fullfirenumber",
+      "human_description": ""
+    },
+    {
+      "field_name": "complexname",
+      "human_description": ""
+    },
+    {
+      "field_name": "firename",
+      "human_description": ""
+    },
+    {
+      "field_name": "size_class",
+      "human_description": ""
+    },
+    {
+      "field_name": "esttotalacres",
+      "human_description": ""
+    },
+    {
+      "field_name": "protected_acres",
+      "human_description": ""
+    },
+    {
+      "field_name": "humanorlightning",
+      "human_description": ""
+    },
+    {
+      "field_name": "causeby",
+      "human_description": ""
+    },
+    {
+      "field_name": "generalcause",
+      "human_description": ""
+    },
+    {
+      "field_name": "specificcause",
+      "human_description": ""
+    },
+    {
+      "field_name": "cause_comments",
+      "human_description": ""
+    },
+    {
+      "field_name": "lat_dd",
+      "human_description": ""
+    },
+    {
+      "field_name": "long_dd",
+      "human_description": ""
+    },
+    {
+      "field_name": "latlongddpoint",
+      "human_description": ""
+    },
+    {
+      "field_name": "fo_landowntype",
+      "human_description": ""
+    },
+    {
+      "field_name": "twn",
+      "human_description": ""
+    },
+    {
+      "field_name": "rng",
+      "human_description": ""
+    },
+    {
+      "field_name": "sec",
+      "human_description": ""
+    },
+    {
+      "field_name": "subdiv",
+      "human_description": ""
+    },
+    {
+      "field_name": "landmarklocation",
+      "human_description": ""
+    },
+    {
+      "field_name": "county",
+      "human_description": ""
+    },
+    {
+      "field_name": "regusezone",
+      "human_description": ""
+    },
+    {
+      "field_name": "reguserestriction",
+      "human_description": ""
+    },
+    {
+      "field_name": "industrial_restriction",
+      "human_description": ""
+    },
+    {
+      "field_name": "ign_datetime",
+      "human_description": ""
+    },
+    {
+      "field_name": "reportdatetime",
+      "human_description": ""
+    },
+    {
+      "field_name": "discover_datetime",
+      "human_description": ""
+    },
+    {
+      "field_name": "control_datetime",
+      "human_description": ""
+    },
+    {
+      "field_name": "creationdate",
+      "human_description": ""
+    },
+    {
+      "field_name": "modifieddate",
+      "human_description": ""
+    },
+    {
+      "field_name": "districtcode",
+      "human_description": ""
+    },
+    {
+      "field_name": "unitcode",
+      "human_description": ""
+    },
+    {
+      "field_name": "distfirenumber",
+      "human_description": ""
+    }
+  ]
+}

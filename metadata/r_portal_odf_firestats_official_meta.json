@@ -10,7 +10,7 @@
   "description" : "Oregon Dept of Forestry wildfire occurrence data by point of origin for the years 2000-2025.",
   "diciBackend" : false,
   "displayType" : "table",
-  "downloadCount" : 1462,
+  "downloadCount" : 1467,
   "hideFromCatalog" : false,
   "hideFromDataJson" : false,
   "locked" : false,

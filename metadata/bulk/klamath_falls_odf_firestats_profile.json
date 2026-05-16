@@ -1,8 +1,8 @@
 {
   "source_key": "portal_odf_firestats",
-  "source_url": "https://data.oregon.gov/resource/fa7z-shhx.csv?%24limit=50000",
-  "documentation_url": "https://data.oregon.gov/api/views/fa7z-shhx.json",
-  "fetch_timestamp": "2026-05-16T02:38:38.199915",
+  "source_url": "local://klamath_falls_odf_firestats.csv",
+  "documentation_url": null,
+  "fetch_timestamp": "2026-05-16T02:57:13.525667",
   "row_count": 100,
   "columns": [
     {
@@ -314,7 +314,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": null,
       "null_count": 0,
-      "unique_values": 85,
+      "unique_values": 83,
       "human_description": null
     },
     {

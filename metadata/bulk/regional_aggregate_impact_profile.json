@@ -1,0 +1,81 @@
+{
+  "source_key": "regional_aggregate_impact",
+  "source_url": "local://regional_aggregate_impact.csv",
+  "documentation_url": null,
+  "fetch_timestamp": "2026-05-16T02:57:13.610203",
+  "row_count": 11,
+  "columns": [
+    {
+      "name": "GACC",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": "Geographic Area Coordination Center region"
+    },
+    {
+      "name": "Fire Count",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Total Burned Area (acres)",
+      "inferred_type": "numeric",
+      "inferred_unit_tag": "area",
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Mean Fire Size",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Mean Max Fire Spread Rate",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Total Suppression Costs ($)",
+      "inferred_type": "currency",
+      "inferred_unit_tag": "USD",
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Total Personnel x Reports",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Total Structures Threatened",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    },
+    {
+      "name": "Total Structures Destroyed",
+      "inferred_type": "string",
+      "inferred_unit_tag": null,
+      "null_count": 0,
+      "unique_values": 11,
+      "human_description": null
+    }
+  ]
+}

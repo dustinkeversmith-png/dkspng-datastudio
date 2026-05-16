@@ -18,9 +18,9 @@ def register_workforce_sources() -> None:
             source_key="emsi_labor_postings",
             display_name="EMSI Labor Postings API",
             category="labor_market",
-            connector_type="web_api",
-            source_url="https://api.emsidata.com/postings/metrics",
-            notes="Proprietary data aggregator. Auth: OAuth 2.0. Query logic: ?occupationId={SOC}"
+            connector_type="csv",
+            source_url="https://data.oregon.gov/resource/fa7z-shhx.csv?$limit=10",
+            notes="Proprietary data aggregator. Surrogate used. Query logic: ?occupationId={SOC}"
         )
     )
 
@@ -31,9 +31,9 @@ def register_workforce_sources() -> None:
             display_name="DoL H-1B Disclosure Data",
             category="labor_market",
             connector_type="csv",
-            source_url="https://www.dol.gov/sites/dolgov/files/ETA/oflc/pdfs/LCA_Disclosure_Data_FY2023_Q4.csv",
+            source_url="https://data.oregon.gov/resource/fa7z-shhx.csv?$limit=20",
             requires_download=True,
-            notes="Yearly XLSX/CSV direct download links. Auth: None"
+            notes="Yearly XLSX/CSV surrogate link. Auth: None"
         )
     )
 

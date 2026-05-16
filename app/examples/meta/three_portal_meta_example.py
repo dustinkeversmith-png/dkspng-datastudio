@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
 from app.metadata_finder import discover_metadata, fetch_metadata, DocumentRegistry
+from app.metadata_finder.adapter import OfficialMetaAdapter
 from app.metadata_analyzer.analyzer import MetadataAnalyzer
 from app.metadata_analyzer.exporters import export_to_json, export_to_markdown, export_to_csv
 from app.workflow import source
@@ -33,6 +34,7 @@ def run_three_portal_meta_example() -> None:
     ]
 
     doc_registry = DocumentRegistry()
+    adapter = OfficialMetaAdapter(doc_registry)
 
     for portal in portals:
         print(f"\n--- Processing {portal['key']} ---")
@@ -47,9 +49,9 @@ def run_three_portal_meta_example() -> None:
             print(f"Cached metadata to: {local_path}")
             doc_registry.register_document(portal["key"], local_path, portal["type"])
         
-        # 3. Retrieve Official Descriptions
-        official_descs = doc_registry.get_descriptions(portal["key"])
-        print(f"Parsed {len(official_descs)} official descriptions.")
+        # 3. Use Adapter to extract human information (decoupled from analyzer)
+        unified_meta = adapter.extract_unified_meta(portal["key"])
+        print(f"Adapter extracted {len(unified_meta['extracted_fields'])} definitions.")
         
         # 4. Analyze Data Patch
         patch = []
@@ -75,15 +77,15 @@ def run_three_portal_meta_example() -> None:
         except Exception as e:
             print(f"Data fetch failed (skipping patch profiling): {e}")
 
-        # 5. Generate Profile with Official Context
+        # 5. Generate Profile (Analyzer operates purely on data structure now)
         analyzer = MetadataAnalyzer(
             source_key=portal["key"],
             source_url=portal["url"]
         )
         
+        # Note: We do not use the new converted meta data in the analyzer yet!
         profile = analyzer.generate_profile(
             patch,
-            human_overrides=official_descs,
             documentation_url=meta_url
         )
 

@@ -1,0 +1,129 @@
+{
+  "source_key": "hazard_spatial_boundaries",
+  "extracted_fields": [
+    {
+      "field_name": "REF_ID_COD",
+      "human_description": ""
+    },
+    {
+      "field_name": "UNIQUE_ID",
+      "human_description": ""
+    },
+    {
+      "field_name": "DATA_SOURC",
+      "human_description": ""
+    },
+    {
+      "field_name": "LOC_METHOD",
+      "human_description": ""
+    },
+    {
+      "field_name": "ORIG_ID",
+      "human_description": ""
+    },
+    {
+      "field_name": "SLIDE_NAME",
+      "human_description": ""
+    },
+    {
+      "field_name": "LENGTH_ft",
+      "human_description": ""
+    },
+    {
+      "field_name": "WIDTH_ft",
+      "human_description": ""
+    },
+    {
+      "field_name": "DEPTH_ft",
+      "human_description": ""
+    },
+    {
+      "field_name": "SLOPE",
+      "human_description": ""
+    },
+    {
+      "field_name": "TYPE_MOVE",
+      "human_description": ""
+    },
+    {
+      "field_name": "MOVE_CLASS",
+      "human_description": ""
+    },
+    {
+      "field_name": "CONTR_FACT",
+      "human_description": ""
+    },
+    {
+      "field_name": "TYPE_MTRL",
+      "human_description": ""
+    },
+    {
+      "field_name": "AREA_ft2",
+      "human_description": ""
+    },
+    {
+      "field_name": "VOLUME_ft3",
+      "human_description": ""
+    },
+    {
+      "field_name": "DEEP_SHAL",
+      "human_description": ""
+    },
+    {
+      "field_name": "DAMAGES",
+      "human_description": ""
+    },
+    {
+      "field_name": "LOSSES",
+      "human_description": ""
+    },
+    {
+      "field_name": "COMMENTS",
+      "human_description": ""
+    },
+    {
+      "field_name": "YEAR",
+      "human_description": ""
+    },
+    {
+      "field_name": "DATE_RANGE",
+      "human_description": ""
+    },
+    {
+      "field_name": "MONTH",
+      "human_description": ""
+    },
+    {
+      "field_name": "DAY",
+      "human_description": ""
+    },
+    {
+      "field_name": "FID",
+      "human_description": ""
+    },
+    {
+      "field_name": "ANNUAL_COS",
+      "human_description": ""
+    },
+    {
+      "field_name": "REPAIR_COS",
+      "human_description": ""
+    },
+    {
+      "field_name": "REACTIVATI",
+      "human_description": ""
+    },
+    {
+      "field_name": "longitude",
+      "human_description": ""
+    },
+    {
+      "field_name": "latitude",
+      "human_description": ""
+    },
+    {
+      "field_name": "session_source_key",
+      "human_description": ""
+    }
+  ]
+}

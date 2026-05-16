@@ -1,15 +1,16 @@
 {
-  "source_key": "portal_dogami_slido",
-  "source_url": "https://gis.dogami.oregon.gov/arcgis/rest/services/Public/SLIDO42/MapServer/0/query",
-  "fetch_timestamp": "2026-05-16T01:06:40.055065",
-  "row_count": 52,
+  "source_key": "hazard_spatial_boundaries",
+  "source_url": "local://hazard_spatial_boundaries.csv",
+  "documentation_url": null,
+  "fetch_timestamp": "2026-05-16T02:57:13.491116",
+  "row_count": 18,
   "columns": [
     {
       "name": "REF_ID_COD",
       "inferred_type": "string",
       "inferred_unit_tag": "unique_identifier",
       "null_count": 0,
-      "unique_values": 2,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -17,7 +18,7 @@
       "inferred_type": "string",
       "inferred_unit_tag": "unique_identifier",
       "null_count": 0,
-      "unique_values": 52,
+      "unique_values": 18,
       "human_description": null
     },
     {
@@ -25,7 +26,7 @@
       "inferred_type": "categorical",
       "inferred_unit_tag": "label_lookup",
       "null_count": 0,
-      "unique_values": 4,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -33,7 +34,7 @@
       "inferred_type": "categorical",
       "inferred_unit_tag": "label_lookup",
       "null_count": 0,
-      "unique_values": 4,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -41,15 +42,15 @@
       "inferred_type": "string",
       "inferred_unit_tag": "unique_identifier",
       "null_count": 0,
-      "unique_values": 52,
+      "unique_values": 18,
       "human_description": null
     },
     {
       "name": "SLIDE_NAME",
-      "inferred_type": "string",
-      "inferred_unit_tag": null,
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
       "null_count": 0,
-      "unique_values": 17,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -57,7 +58,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": "ft",
       "null_count": 0,
-      "unique_values": 3,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -65,7 +66,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": "ft",
       "null_count": 0,
-      "unique_values": 3,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -94,10 +95,10 @@
     },
     {
       "name": "MOVE_CLASS",
-      "inferred_type": "string",
-      "inferred_unit_tag": null,
+      "inferred_type": "categorical",
+      "inferred_unit_tag": "label_lookup",
       "null_count": 0,
-      "unique_values": 6,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -105,7 +106,7 @@
       "inferred_type": "categorical",
       "inferred_unit_tag": "label_lookup",
       "null_count": 0,
-      "unique_values": 2,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -113,7 +114,7 @@
       "inferred_type": "categorical",
       "inferred_unit_tag": "label_lookup",
       "null_count": 0,
-      "unique_values": 3,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -129,7 +130,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": "ft3",
       "null_count": 0,
-      "unique_values": 3,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -145,7 +146,7 @@
       "inferred_type": "string",
       "inferred_unit_tag": null,
       "null_count": 0,
-      "unique_values": 27,
+      "unique_values": 7,
       "human_description": null
     },
     {
@@ -161,7 +162,7 @@
       "inferred_type": "string",
       "inferred_unit_tag": null,
       "null_count": 0,
-      "unique_values": 49,
+      "unique_values": 18,
       "human_description": null
     },
     {
@@ -177,7 +178,7 @@
       "inferred_type": "datetime",
       "inferred_unit_tag": "temporal",
       "null_count": 0,
-      "unique_values": 2,
+      "unique_values": 1,
       "human_description": null
     },
     {
@@ -201,7 +202,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": "unique_identifier",
       "null_count": 0,
-      "unique_values": 52,
+      "unique_values": 18,
       "human_description": null
     },
     {
@@ -209,7 +210,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": null,
       "null_count": 0,
-      "unique_values": 6,
+      "unique_values": 12,
       "human_description": null
     },
     {
@@ -217,7 +218,7 @@
       "inferred_type": "numeric",
       "inferred_unit_tag": null,
       "null_count": 0,
-      "unique_values": 33,
+      "unique_values": 14,
       "human_description": null
     },
     {
@@ -233,7 +234,7 @@
       "inferred_type": "float",
       "inferred_unit_tag": "decimal_degrees",
       "null_count": 0,
-      "unique_values": 52,
+      "unique_values": 18,
       "human_description": null
     },
     {
@@ -241,7 +242,7 @@
       "inferred_type": "float",
       "inferred_unit_tag": "decimal_degrees",
       "null_count": 0,
-      "unique_values": 52,
+      "unique_values": 18,
       "human_description": null
     },
     {

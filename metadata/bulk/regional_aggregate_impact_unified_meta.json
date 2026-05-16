@@ -1,0 +1,41 @@
+{
+  "source_key": "regional_aggregate_impact",
+  "extracted_fields": [
+    {
+      "field_name": "GACC",
+      "human_description": "Geographic Area Coordination Center region"
+    },
+    {
+      "field_name": "Fire Count",
+      "human_description": ""
+    },
+    {
+      "field_name": "Total Burned Area (acres)",
+      "human_description": ""
+    },
+    {
+      "field_name": "Mean Fire Size",
+      "human_description": ""
+    },
+    {
+      "field_name": "Mean Max Fire Spread Rate",
+      "human_description": ""
+    },
+    {
+      "field_name": "Total Suppression Costs ($)",
+      "human_description": ""
+    },
+    {
+      "field_name": "Total Personnel x Reports",
+      "human_description": ""
+    },
+    {
+      "field_name": "Total Structures Threatened",
+      "human_description": ""
+    },
+    {
+      "field_name": "Total Structures Destroyed",
+      "human_description": ""
+    }
+  ]
+}
