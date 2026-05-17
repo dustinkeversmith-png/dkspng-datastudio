@@ -11,10 +11,14 @@
             "id": "b2ee4da0d4fc1c16",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "README_PHASE_2.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "README_PHASE_2"
             }
           }
         ]
@@ -178,17 +182,25 @@
   },
   "active": "b2ee4da0d4fc1c16",
   "lastOpenFiles": [
+    "tests/test_core/__pycache__/test_validation.cpython-312-pytest-8.3.5.pyc",
+    "tests/test_core/__pycache__/test_selectors.cpython-312-pytest-8.3.5.pyc",
+    "tests/test_core/__pycache__/test_registry.cpython-312-pytest-8.3.5.pyc",
+    "tests/test_core/__pycache__/test_lineage.cpython-312-pytest-8.3.5.pyc",
+    "app/core/__pycache__/selectors.cpython-312.pyc",
+    "app/core/__pycache__/lineage.cpython-312.pyc",
+    "app/core/__pycache__/registry.cpython-312.pyc",
+    "app/core/__pycache__/component.cpython-312.pyc",
+    "app/core/__pycache__/__init__.cpython-312.pyc",
+    "app/core/__pycache__/validation.cpython-312.pyc",
+    "app/core/__pycache__/result.cpython-312.pyc",
+    "README.md",
+    "PHASE_4_USAGE_SNIPPET.md",
+    "PHASE_3_USAGE_SNIPPET.md",
+    "PHASE_2_USAGE_SNIPPET.md",
+    "PHASE_1_NEXT_STEPS.md",
+    "NATURAL_API_DATASET_INTAKE.md",
+    "docs/api_guide.md",
     "docs/session_log_metadata_pipeline.md",
-    "artifacts/composite_relationship_matrix.csv",
-    "artifacts/composite_dataset_overview.csv",
-    "app/composite_source_analysis/__pycache__/__init__.cpython-312.pyc",
-    "app/composite_source_analysis/__pycache__/integrator.cpython-312.pyc",
-    "app/composite_source_analysis/__pycache__",
-    "app/examples/meta/__pycache__/composite_integration_example.cpython-312.pyc",
-    "app/examples/meta/composite_integration_example.py",
-    "app/composite_source_analysis/__init__.py",
-    "app/composite_source_analysis/integrator.py",
-    "app/composite_source_analysis",
     "metadata/bulk/regional_aggregate_impact_profile.md",
     "metadata/bulk/p22_table_01_h1b_visas_profile.md",
     "metadata/bulk/p19_table_01_emsi_postings_profile.md",

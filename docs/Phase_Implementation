@@ -1,0 +1,1584 @@
+Below is a remade implementation guide with the new design rule:
+
+**Everything is a composable base abstraction first.**
+Mappings do not care whether they target rows, columns, datasets, geometry, layers, or metadata. Operations are virtual/base operations. Analyzers are base analyzers that act on a `Source` and return typed analysis results. Visualizers, GIS tools, topology tools, and views follow the same plugin-style model.
+
+The current API guide defines `Source` as the foundational data node that manages endpoint definitions, dataset grouping, connector routines, and attached metadata in memory. It also shows that the system is meant to stay lightweight, script-driven, and decoupled from legacy FastAPI/database implementations. This upgrade should preserve that style. 
+
+---
+
+# Phase Implementation Guide: Virtual Source Mapping, Operations, Analysis, Views, Visualization, GIS, and Real Tests
+
+## 1. Mission
+
+Upgrade Regional Data Studio into a generalized source-processing framework where:
+
+```text
+Source
+  -> Mapping
+  -> Query
+  -> Operation
+  -> Analysis
+  -> View
+  -> Visualization
+  -> GIS / Topology
+  -> Export
+```
+
+All major features should be built as **abstract base classes** with concrete implementations.
+
+Avoid hardcoding concepts like:
+
+```text
+ColumnMapping
+RowOperation
+ColumnOperation
+```
+
+Instead, use generalized concepts:
+
+```text
+Mapping
+Operation
+Analyzer
+View
+Visualizer
+SpatialTool
+TopologyTool
+```
+
+Each object should define:
+
+```text
+input contract
+output contract
+target selector
+configuration/spec
+execution result
+metadata
+lineage
+validation
+```
+
+---
+
+# 2. Core Design Rules
+
+## 2.1 Everything is a Component
+
+Every feature should have:
+
+```python
+class BaseComponent(ABC):
+    component_key: str
+    display_name: str
+    description: str | None
+
+    @abstractmethod
+    def validate(self, context: ExecutionContext) -> ValidationResult:
+        ...
+
+    @abstractmethod
+    def execute(self, context: ExecutionContext) -> ComponentResult:
+        ...
+```
+
+The major specialized base classes inherit from this idea:
+
+```text
+BaseMapping
+BaseOperation
+BaseAnalyzer
+BaseView
+BaseVisualizer
+BaseSpatialTool
+BaseTopologyTool
+```
+
+---
+
+## 2.2 No Hard Split Between Rows and Columns
+
+A mapping should be able to map:
+
+```text
+columns
+rows
+datasets
+sub-sources
+metadata
+geometry
+time fields
+semantic roles
+visual roles
+analysis roles
+```
+
+So instead of:
+
+```python
+ColumnMapping
+RowMapping
+```
+
+use:
+
+```python
+Mapping
+MappingTarget
+MappingRule
+```
+
+---
+
+## 2.3 Source Methods Stay Thin
+
+The existing API uses simple workflows such as:
+
+```python
+my_source = source("portal_odf_firestats")
+rows = my_source.fetch(limit=100)
+profile = my_source.run_meta_analysis("portal_odf_firestats")
+```
+
+The guide also shows that `Source.fetch()` can fetch across all bound definitions or target a specific source key. 
+
+Keep this style, but make the `Source` object delegate to engines:
+
+```python
+src.apply(operation)
+src.map(mapping)
+src.analyze(analyzer)
+src.view(view)
+src.visualize(visualizer)
+```
+
+---
+
+# 3. Proposed File Structure
+
+```text
+app/
+  core/
+    __init__.py
+    component.py
+    context.py
+    result.py
+    validation.py
+    registry.py
+    lineage.py
+    selectors.py
+
+  schemas/
+    __init__.py
+    source_definition.py
+    component_spec.py
+    mapping_spec.py
+    operation_spec.py
+    analyzer_spec.py
+    view_spec.py
+    visualization_spec.py
+    spatial_spec.py
+    topology_spec.py
+
+  source/
+    __init__.py
+    source.py
+    source_registry.py
+    source_factory.py
+    source_cache.py
+    derived_source.py
+
+  mappings/
+    __init__.py
+    base_mapping.py
+    mapping_registry.py
+    mapping_engine.py
+    mapping_targets.py
+    rules/
+      __init__.py
+      rename_rule.py
+      select_rule.py
+      filter_rule.py
+      semantic_role_rule.py
+      type_role_rule.py
+      geometry_role_rule.py
+      dataset_role_rule.py
+
+  operations/
+    __init__.py
+    base_operation.py
+    operation_registry.py
+    operation_engine.py
+    atomic/
+      __init__.py
+      select_operation.py
+      rename_operation.py
+      filter_operation.py
+      remove_operation.py
+      derive_operation.py
+      aggregate_operation.py
+      join_operation.py
+      split_operation.py
+      sort_operation.py
+      sample_operation.py
+      normalize_operation.py
+      expression_operation.py
+    pipelines/
+      __init__.py
+      operation_pipeline.py
+
+  analysis/
+    __init__.py
+    base_analyzer.py
+    analyzer_registry.py
+    analyzer_engine.py
+    results.py
+    analyzers/
+      __init__.py
+      summary_analyzer.py
+      type_similarity_analyzer.py
+      correlation_analyzer.py
+      distribution_analyzer.py
+      missingness_analyzer.py
+      spatial_summary_analyzer.py
+      temporal_summary_analyzer.py
+
+  views/
+    __init__.py
+    base_view.py
+    view_registry.py
+    view_engine.py
+    views/
+      __init__.py
+      source_preview_view.py
+      metadata_view.py
+      schema_view.py
+      mapping_view.py
+      analysis_view.py
+      data_table_view.py
+
+  visualization/
+    __init__.py
+    base_visualizer.py
+    visualization_registry.py
+    visualization_engine.py
+    role_binding.py
+    visual_result.py
+    methods/
+      __init__.py
+      scatter_visualizer.py
+      heatmap_visualizer.py
+      histogram_visualizer.py
+      correlation_matrix_visualizer.py
+      timeseries_visualizer.py
+      layered_map_visualizer.py
+
+  gis/
+    __init__.py
+    base_spatial_tool.py
+    spatial_registry.py
+    spatial_engine.py
+    tools/
+      __init__.py
+      geometry_conversion_tool.py
+      spatial_intersection_tool.py
+      nearest_neighbor_tool.py
+      buffer_tool.py
+      spatial_join_tool.py
+
+  topology/
+    __init__.py
+    base_topology_tool.py
+    topology_registry.py
+    topology_engine.py
+    tools/
+      __init__.py
+      adjacency_graph_tool.py
+      layer_relationship_tool.py
+      spatial_network_tool.py
+
+  workflow.py
+
+tests/
+  fixtures/
+    sources/
+      fire_occurrences.csv
+      landslides.csv
+      population.csv
+      polygons.geojson
+    registry/
+      test_sources.py
+
+  test_core/
+    test_component_contracts.py
+    test_registry.py
+    test_lineage.py
+    test_selectors.py
+
+  test_mappings/
+    test_mapping_engine_real_sources.py
+    test_mapping_rules_real_sources.py
+
+  test_operations/
+    test_atomic_operations_real_sources.py
+    test_operation_pipeline_real_sources.py
+    test_derived_sources_real_sources.py
+
+  test_analysis/
+    test_summary_analyzer_real_sources.py
+    test_type_similarity_analyzer_real_sources.py
+    test_correlation_analyzer_real_sources.py
+    test_distribution_analyzer_real_sources.py
+
+  test_views/
+    test_source_views_real_sources.py
+    test_metadata_views_real_sources.py
+
+  test_visualization/
+    test_visualizers_real_sources.py
+    test_visualization_artifacts_real_sources.py
+
+  test_gis/
+    test_spatial_tools_real_sources.py
+    test_topology_tools_real_sources.py
+```
+
+---
+
+# 4. Core Abstractions
+
+## 4.1 Execution Context
+
+Every component receives the same kind of context.
+
+```python
+@dataclass
+class ExecutionContext:
+    source: Source
+    source_key: str | None = None
+    mapping: "BaseMapping | None" = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+    params: dict[str, Any] = field(default_factory=dict)
+```
+
+This lets every operation, analyzer, visualizer, GIS tool, or view work against the same source-processing contract.
+
+---
+
+## 4.2 Component Result
+
+```python
+@dataclass
+class ComponentResult:
+    component_key: str
+    result_type: str
+    data: Any = None
+    artifacts: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    lineage: dict[str, Any] = field(default_factory=dict)
+```
+
+Examples:
+
+```text
+operation result -> derived Source or DataFrame
+analysis result -> numerical/statistical dictionary
+view result -> serializable display model
+visualization result -> artifact path + render metadata
+GIS result -> GeoDataFrame/DataFrame/relationship graph
+topology result -> graph dictionary
+```
+
+---
+
+## 4.3 Validation Result
+
+```python
+@dataclass
+class ValidationResult:
+    ok: bool
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+```
+
+Every component should validate before execution.
+
+---
+
+# 5. Generalized Mapping System
+
+## 5.1 Base Mapping
+
+A mapping is not a column mapping or row mapping. It is a general rule system that binds names, roles, selectors, metadata, and derived meanings to parts of a source.
+
+```python
+class BaseMapping(ABC):
+    mapping_key: str
+    display_name: str
+
+    @abstractmethod
+    def resolve(self, context: ExecutionContext) -> "ResolvedMapping":
+        ...
+```
+
+---
+
+## 5.2 Mapping Target
+
+```python
+@dataclass
+class MappingTarget:
+    target_key: str
+    target_type: str
+    selector: dict[str, Any]
+    role: str | None = None
+    semantic_type: str | None = None
+    display_name: str | None = None
+    aliases: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+```
+
+`target_type` can be:
+
+```text
+field
+record
+dataset
+sub_source
+geometry
+time
+measure
+dimension
+layer
+metadata
+relationship
+```
+
+Examples:
+
+```python
+MappingTarget(
+    target_key="incident_date",
+    target_type="field",
+    selector={"name": "FIRE_DATE"},
+    role="time",
+    semantic_type="datetime",
+    display_name="Incident Date"
+)
+```
+
+```python
+MappingTarget(
+    target_key="large_fire_records",
+    target_type="record",
+    selector={
+        "where": {
+            "field": "acres_burned",
+            "op": ">",
+            "value": 10
+        }
+    },
+    role="analysis_subset"
+)
+```
+
+```python
+MappingTarget(
+    target_key="fire_points",
+    target_type="geometry",
+    selector={
+        "geometry_type": "point",
+        "lat": "latitude",
+        "lon": "longitude"
+    },
+    role="spatial_points"
+)
+```
+
+---
+
+## 5.3 Mapping Rule
+
+```python
+class BaseMappingRule(ABC):
+    rule_key: str
+
+    @abstractmethod
+    def apply(
+        self,
+        context: ExecutionContext,
+        target: MappingTarget
+    ) -> MappingTarget:
+        ...
+```
+
+Concrete mapping rules:
+
+```text
+RenameRule
+SelectRule
+FilterRule
+SemanticRoleRule
+TypeRoleRule
+GeometryRoleRule
+DatasetRoleRule
+LayerRoleRule
+```
+
+---
+
+## 5.4 Resolved Mapping
+
+```python
+@dataclass
+class ResolvedMapping:
+    mapping_key: str
+    targets: dict[str, MappingTarget]
+    source_key: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def by_role(self, role: str) -> list[MappingTarget]:
+        ...
+
+    def by_type(self, target_type: str) -> list[MappingTarget]:
+        ...
+
+    def get(self, target_key: str) -> MappingTarget:
+        ...
+```
+
+---
+
+# 6. Virtual Operation System
+
+## 6.1 Base Operation
+
+Operations are not separated into row operations or column operations. They are generic transformations on a source, selected data region, mapping target, or derived data representation.
+
+```python
+class BaseOperation(ABC):
+    operation_key: str
+    display_name: str
+    output_mode: str = "dataframe"
+
+    @abstractmethod
+    def validate(self, context: ExecutionContext) -> ValidationResult:
+        ...
+
+    @abstractmethod
+    def execute(self, context: ExecutionContext) -> ComponentResult:
+        ...
+```
+
+---
+
+## 6.2 Atomic Operations
+
+Concrete operations should include:
+
+```text
+SelectOperation
+RenameOperation
+FilterOperation
+RemoveOperation
+DeriveOperation
+ExpressionOperation
+AggregateOperation
+JoinOperation
+SplitOperation
+SortOperation
+SampleOperation
+NormalizeOperation
+TypeCastOperation
+```
+
+These should be general enough to target fields, records, datasets, or mapped semantic roles.
+
+Example:
+
+```python
+operation = RemoveOperation(
+    target={
+        "target_type": "field",
+        "names": ["unneeded_column", "legacy_id"]
+    }
+)
+```
+
+```python
+operation = RemoveOperation(
+    target={
+        "target_type": "record",
+        "where": {
+            "field": "acres_burned",
+            "op": "<=",
+            "value": 0
+        }
+    }
+)
+```
+
+Same operation class. Different target type.
+
+---
+
+## 6.3 Expression Operation
+
+```python
+operation = ExpressionOperation(
+    output_target="burn_index",
+    expression="acres_burned / population_density",
+    target_type="field"
+)
+```
+
+Rules:
+
+```text
+Do not use raw eval.
+Use pandas.eval, numexpr, or a safe expression parser.
+Validate all referenced symbols exist.
+Return a derived source or derived dataframe.
+Record lineage.
+```
+
+---
+
+## 6.4 Operation Pipeline
+
+```python
+pipeline = OperationPipeline(
+    pipeline_key="fire_cleanup_pipeline",
+    operations=[
+        SelectOperation(...),
+        RenameOperation(...),
+        FilterOperation(...),
+        ExpressionOperation(...),
+        NormalizeOperation(...)
+    ]
+)
+```
+
+```python
+result = source.apply(pipeline)
+```
+
+The pipeline itself is also an operation:
+
+```python
+class OperationPipeline(BaseOperation):
+    operations: list[BaseOperation]
+
+    def execute(self, context: ExecutionContext) -> ComponentResult:
+        ...
+```
+
+---
+
+# 7. Analyzer System
+
+## 7.1 Base Analyzer
+
+An analyzer is a function-like component that acts on a source and outputs analysis.
+
+It may be:
+
+```text
+graphable
+not graphable
+numeric
+categorical
+spatial
+temporal
+statistical
+topological
+```
+
+```python
+class BaseAnalyzer(ABC):
+    analyzer_key: str
+    display_name: str
+    graphable: bool = False
+    output_kind: str = "generic"
+
+    @abstractmethod
+    def analyze(self, context: ExecutionContext) -> "AnalysisResult":
+        ...
+```
+
+---
+
+## 7.2 Analysis Result
+
+```python
+@dataclass
+class AnalysisResult:
+    analyzer_key: str
+    output_kind: str
+    graphable: bool
+    data: Any
+    numeric_summary: dict[str, Any] = field(default_factory=dict)
+    graph_spec: dict[str, Any] | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+    lineage: dict[str, Any] = field(default_factory=dict)
+```
+
+---
+
+## 7.3 Concrete Analyzers
+
+```text
+SummaryAnalyzer
+TypeSimilarityAnalyzer
+CorrelationAnalyzer
+DistributionAnalyzer
+MissingnessAnalyzer
+TemporalSummaryAnalyzer
+SpatialSummaryAnalyzer
+TopologyAnalyzer
+```
+
+Examples:
+
+```python
+result = source.analyze(
+    SummaryAnalyzer(target={"target_type": "dataset"})
+)
+```
+
+```python
+result = source.analyze(
+    CorrelationAnalyzer(
+        target={"target_type": "field", "semantic_type": "numeric"}
+    )
+)
+```
+
+```python
+result = source.analyze(
+    TypeSimilarityAnalyzer(
+        target={"target_type": "field"},
+        base_types=["spatial", "time", "numeric", "categorical"]
+    )
+)
+```
+
+---
+
+# 8. View System
+
+## 8.1 Base View
+
+A view is a component that converts a source, mapping, operation result, or analysis result into a serializable display model.
+
+```python
+class BaseView(ABC):
+    view_key: str
+    display_name: str
+
+    @abstractmethod
+    def render(self, context: ExecutionContext) -> "ViewResult":
+        ...
+```
+
+---
+
+## 8.2 View Result
+
+```python
+@dataclass
+class ViewResult:
+    view_key: str
+    view_type: str
+    data: dict[str, Any]
+    metadata: dict[str, Any] = field(default_factory=dict)
+```
+
+---
+
+## 8.3 Concrete Views
+
+```text
+SourcePreviewView
+DataTableView
+MetadataView
+SchemaView
+MappingView
+AnalysisView
+LineageView
+```
+
+Example:
+
+```python
+source.view(SourcePreviewView(limit=25))
+source.view(MetadataView())
+source.view(SchemaView())
+source.view(MappingView(mapping_key="regional_mapping"))
+```
+
+---
+
+# 9. Visualization System
+
+## 9.1 Base Visualizer
+
+A visualizer takes a source or analysis result and produces a graph, chart, map, or artifact.
+
+```python
+class BaseVisualizer(ABC):
+    visualizer_key: str
+    display_name: str
+    required_roles: list[str] = []
+
+    @abstractmethod
+    def render(self, context: ExecutionContext) -> "VisualizationResult":
+        ...
+```
+
+---
+
+## 9.2 Role Binding
+
+Instead of visualizers directly asking for columns, they ask for roles.
+
+```python
+@dataclass
+class RoleBinding:
+    role: str
+    target_key: str
+    required: bool = True
+```
+
+Example:
+
+```python
+ScatterVisualizer(
+    role_bindings=[
+        RoleBinding(role="x", target_key="longitude"),
+        RoleBinding(role="y", target_key="latitude"),
+        RoleBinding(role="size", target_key="acres_burned", required=False),
+        RoleBinding(role="color", target_key="fire_cause", required=False),
+    ]
+)
+```
+
+---
+
+## 9.3 Concrete Visualizers
+
+```text
+ScatterVisualizer
+HeatmapVisualizer
+HistogramVisualizer
+CorrelationMatrixVisualizer
+TimeSeriesVisualizer
+LayeredMapVisualizer
+TopologyGraphVisualizer
+```
+
+Each should live in:
+
+```text
+app/visualization/methods/
+```
+
+Each visualizer should:
+
+```text
+validate required roles
+load source data through context
+apply optional pre-operations
+produce artifact path
+return VisualizationResult
+```
+
+---
+
+# 10. GIS and Spatial Tools
+
+## 10.1 Base Spatial Tool
+
+```python
+class BaseSpatialTool(ABC):
+    tool_key: str
+    display_name: str
+
+    @abstractmethod
+    def execute(self, context: ExecutionContext) -> ComponentResult:
+        ...
+```
+
+Concrete tools:
+
+```text
+GeometryConversionTool
+SpatialIntersectionTool
+NearestNeighborTool
+BufferTool
+SpatialJoinTool
+```
+
+---
+
+## 10.2 Optional GIS Dependencies
+
+GIS tools should not break the base system.
+
+Use optional imports:
+
+```python
+try:
+    import geopandas as gpd
+    from shapely.geometry import Point
+except ImportError:
+    gpd = None
+    Point = None
+```
+
+If unavailable:
+
+```text
+GIS dependencies are not installed. Install geopandas and shapely to use this feature.
+```
+
+---
+
+# 11. Topology Tools
+
+## 11.1 Base Topology Tool
+
+```python
+class BaseTopologyTool(ABC):
+    topology_key: str
+    display_name: str
+
+    @abstractmethod
+    def build(self, context: ExecutionContext) -> ComponentResult:
+        ...
+```
+
+Concrete tools:
+
+```text
+AdjacencyGraphTool
+LayerRelationshipTool
+SpatialNetworkTool
+TopologySummaryTool
+```
+
+Output should be serializable:
+
+```python
+{
+    "nodes": [...],
+    "edges": [...],
+    "metadata": {...}
+}
+```
+
+---
+
+# 12. Source API Extensions
+
+Preserve the existing API style from the guide, including `source("key")`, `source(SourceDefinition)`, `add_source()`, `fetch()`, `run_meta_analysis()`, `run_meta_finder()`, and `data_exporter()` usage. The guide also shows that exporting through `DataExporter` should remain a clean decoupled write operation. 
+
+Add generalized methods:
+
+```python
+class Source:
+    def map(self, mapping: BaseMapping | str, **params) -> ResolvedMapping:
+        ...
+
+    def apply(self, operation: BaseOperation | OperationPipeline | str, **params) -> ComponentResult:
+        ...
+
+    def analyze(self, analyzer: BaseAnalyzer | str, **params) -> AnalysisResult:
+        ...
+
+    def view(self, view: BaseView | str, **params) -> ViewResult:
+        ...
+
+    def visualize(self, visualizer: BaseVisualizer | str, **params) -> VisualizationResult:
+        ...
+
+    def spatial(self, tool: BaseSpatialTool | str, **params) -> ComponentResult:
+        ...
+
+    def topology(self, tool: BaseTopologyTool | str, **params) -> ComponentResult:
+        ...
+
+    def derive(self, operation: BaseOperation | OperationPipeline, source_key: str) -> "Source":
+        ...
+```
+
+---
+
+# 13. Workflow API Extensions
+
+Update `app/workflow.py` with factories:
+
+```python
+from app.workflow import (
+    source,
+    data_exporter,
+    mapping,
+    operation,
+    operation_pipeline,
+    analyzer,
+    view,
+    visualizer,
+    spatial_tool,
+    topology_tool,
+)
+```
+
+Example:
+
+```python
+regional = source("local_fire_occurrences")
+
+regional.apply(
+    operation(
+        "filter",
+        target={
+            "target_type": "record",
+            "where": {
+                "field": "acres_burned",
+                "op": ">",
+                "value": 10
+            }
+        }
+    )
+)
+```
+
+---
+
+# 14. Real Test Strategy
+
+The tests must not be empty, fake, or stubbed.
+
+They should use real local source files checked into the test fixtures folder.
+
+## 14.1 Test Fixture Sources
+
+Create deterministic local files:
+
+```text
+tests/fixtures/sources/fire_occurrences.csv
+tests/fixtures/sources/landslides.csv
+tests/fixtures/sources/population.csv
+tests/fixtures/sources/polygons.geojson
+```
+
+Example `fire_occurrences.csv`:
+
+```csv
+incident_id,incident_date,latitude,longitude,acres_burned,fire_cause,county
+F001,2020-08-01,42.21,-121.77,12.5,Lightning,Klamath
+F002,2020-08-03,42.25,-121.70,0.5,Human,Klamath
+F003,2021-07-19,42.40,-121.90,55.0,Lightning,Lake
+F004,2021-09-02,42.10,-121.60,8.0,Unknown,Klamath
+```
+
+Example `landslides.csv`:
+
+```csv
+slide_id,event_date,lat,lon,confidence,type
+L001,2019-01-04,42.22,-121.75,0.91,Debris Flow
+L002,2021-02-11,42.41,-121.91,0.84,Rockfall
+L003,2022-03-15,42.12,-121.62,0.62,Unknown
+```
+
+Example `population.csv`:
+
+```csv
+county,year,population,population_density
+Klamath,2020,70000,11.2
+Klamath,2021,70300,11.3
+Lake,2021,8200,1.1
+```
+
+Register these as real `SourceDefinition` objects in a test registry.
+
+---
+
+## 14.2 Real Source Test Setup
+
+```python
+@pytest.fixture
+def fire_source():
+    return source(SourceDefinition(
+        source_key="test_fire_occurrences",
+        display_name="Test Fire Occurrences",
+        category="test",
+        connector_type="csv",
+        source_url="tests/fixtures/sources/fire_occurrences.csv"
+    ))
+```
+
+Tests should call the actual public API:
+
+```python
+rows = fire_source.fetch(limit=10)
+```
+
+Do not manually fake internal DataFrames unless testing a small pure function.
+
+---
+
+# 15. Required Real Tests
+
+## 15.1 Mapping Tests
+
+```text
+test_mapping_resolves_real_field_targets
+test_mapping_resolves_real_record_targets
+test_mapping_resolves_real_geometry_targets
+test_mapping_aliases_work_against_real_source
+test_mapping_roles_are_discoverable
+test_mapping_validation_fails_for_missing_real_field
+```
+
+## 15.2 Operation Tests
+
+```text
+test_select_operation_on_real_source
+test_rename_operation_on_real_source
+test_filter_operation_on_real_source
+test_remove_operation_removes_fields_on_real_source
+test_remove_operation_removes_records_on_real_source
+test_expression_operation_adds_real_calculated_field
+test_normalize_operation_on_real_numeric_field
+test_join_operation_between_real_fire_and_population_sources
+test_split_operation_creates_real_grouped_outputs
+test_operation_pipeline_runs_multiple_real_operations
+```
+
+## 15.3 Derived Source Tests
+
+```text
+test_operation_can_return_derived_source
+test_derived_source_preserves_parent_lineage
+test_derived_source_fetch_returns_real_transformed_rows
+test_derived_source_metadata_tracks_operation_history
+```
+
+## 15.4 Analyzer Tests
+
+```text
+test_summary_analyzer_on_real_fire_source
+test_type_similarity_analyzer_detects_spatial_and_time_fields
+test_correlation_analyzer_on_real_numeric_fields
+test_distribution_analyzer_returns_real_histogram_data
+test_missingness_analyzer_reports_real_null_counts
+test_spatial_summary_analyzer_detects_real_lat_lon_roles
+```
+
+## 15.5 View Tests
+
+```text
+test_source_preview_view_returns_real_rows
+test_data_table_view_returns_real_serializable_payload
+test_metadata_view_uses_real_meta_analysis_output
+test_schema_view_reports_real_source_fields
+test_mapping_view_reports_real_mapping_targets
+test_analysis_view_displays_real_analysis_result
+```
+
+## 15.6 Visualization Tests
+
+```text
+test_scatter_visualizer_creates_real_png_artifact
+test_histogram_visualizer_creates_real_png_artifact
+test_correlation_matrix_visualizer_creates_real_png_artifact
+test_timeseries_visualizer_creates_real_png_artifact
+test_visualizer_fails_validation_when_required_role_missing
+test_visualizer_runs_pre_operations_before_rendering
+```
+
+## 15.7 GIS and Topology Tests
+
+```text
+test_geometry_conversion_tool_builds_real_geodataframe
+test_spatial_intersection_tool_with_real_geojson_polygon
+test_nearest_neighbor_tool_between_real_fire_and_landslide_sources
+test_adjacency_graph_tool_outputs_real_nodes_and_edges
+test_layer_relationship_tool_outputs_real_layer_graph
+test_gis_tools_return_clear_error_when_dependency_missing
+```
+
+---
+
+# 16. Implementation Order
+
+## Phase 1: Core Component Architecture
+
+Build:
+
+```text
+BaseComponent
+ExecutionContext
+ComponentResult
+ValidationResult
+ComponentRegistry
+Lineage utilities
+Source selectors
+```
+
+Acceptance:
+
+```text
+All components share one validation/execution/result pattern.
+Registries can register and retrieve components.
+Lineage metadata can be attached to outputs.
+```
+
+---
+
+## Phase 2: Generalized Mapping System
+
+Build:
+
+```text
+BaseMapping
+MappingTarget
+BaseMappingRule
+ResolvedMapping
+MappingRegistry
+MappingEngine
+```
+
+Acceptance:
+
+```text
+Mappings can target fields, records, datasets, geometry, metadata, and layers.
+No row-specific or column-specific mapping base class is required.
+Mappings resolve against real test sources.
+```
+
+---
+
+## Phase 3: Virtual Operation System
+
+Build:
+
+```text
+BaseOperation
+OperationRegistry
+OperationEngine
+SelectOperation
+RenameOperation
+FilterOperation
+RemoveOperation
+ExpressionOperation
+AggregateOperation
+JoinOperation
+SplitOperation
+SortOperation
+NormalizeOperation
+OperationPipeline
+```
+
+Acceptance:
+
+```text
+Operations act on mapped targets.
+Operations can transform data or produce derived sources.
+Operation tests use real fixture-backed Source objects.
+```
+
+---
+
+## Phase 4: Analyzer System
+
+Build:
+
+```text
+BaseAnalyzer
+AnalysisResult
+AnalyzerRegistry
+AnalyzerEngine
+SummaryAnalyzer
+TypeSimilarityAnalyzer
+CorrelationAnalyzer
+DistributionAnalyzer
+MissingnessAnalyzer
+SpatialSummaryAnalyzer
+TemporalSummaryAnalyzer
+```
+
+Acceptance:
+
+```text
+Analyzers act on Source.
+Analyzer results are serializable.
+Analyzer results identify whether they are graphable.
+Analyzer tests use real fixture-backed Source objects.
+```
+
+---
+
+## Phase 5: View System
+
+Build:
+
+```text
+BaseView
+ViewResult
+ViewRegistry
+ViewEngine
+SourcePreviewView
+DataTableView
+MetadataView
+SchemaView
+MappingView
+AnalysisView
+LineageView
+```
+
+Acceptance:
+
+```text
+Views return serializable display models.
+Views can display source data, metadata, mappings, analysis, and lineage.
+```
+
+---
+
+## Phase 6: Visualization System
+
+Build:
+
+```text
+BaseVisualizer
+VisualizationResult
+RoleBinding
+VisualizationRegistry
+VisualizationEngine
+ScatterVisualizer
+HeatmapVisualizer
+HistogramVisualizer
+CorrelationMatrixVisualizer
+TimeSeriesVisualizer
+LayeredMapVisualizer
+```
+
+Acceptance:
+
+```text
+Visualizers bind to mapping roles.
+Visualizers can run pre-operations.
+Visualizers create real artifacts from real local sources.
+```
+
+---
+
+## Phase 7: GIS and Topology
+
+Build:
+
+```text
+BaseSpatialTool
+SpatialRegistry
+SpatialEngine
+GeometryConversionTool
+SpatialIntersectionTool
+NearestNeighborTool
+SpatialJoinTool
+BaseTopologyTool
+TopologyRegistry
+TopologyEngine
+AdjacencyGraphTool
+LayerRelationshipTool
+SpatialNetworkTool
+```
+
+Acceptance:
+
+```text
+GIS tools are optional-dependency safe.
+Topology outputs are serializable.
+GIS/topology tests use real fixture sources and real local GeoJSON.
+```
+
+---
+
+# 17. Anti Gravity Prompt
+
+```text
+You are upgrading the current Regional Data Studio codebase described by the API usage guide.
+
+The existing system is lightweight and script-driven. It is centered around Source, SourceDefinition, fetch(), add_source(), run_meta_analysis(), run_meta_finder(), and DataExporter. Preserve this style and do not reintroduce a heavy database or web-server architecture.
+
+Important architectural rule:
+Do not over-specialize features into row-specific and column-specific systems. Build generalized virtual/base classes first.
+
+Implement this phase using the following component model:
+
+1. Core component layer
+   - BaseComponent
+   - ExecutionContext
+   - ComponentResult
+   - ValidationResult
+   - ComponentRegistry
+   - lineage helpers
+   - source selectors
+
+2. Generalized mapping system
+   - BaseMapping
+   - MappingTarget
+   - BaseMappingRule
+   - ResolvedMapping
+   - MappingRegistry
+   - MappingEngine
+   - A mapping target may represent a field, record, dataset, sub-source, geometry, time value, measure, dimension, metadata object, layer, or relationship.
+   - Do not create separate ColumnMapping and RowMapping base classes.
+
+3. Generalized operation system
+   - BaseOperation
+   - OperationRegistry
+   - OperationEngine
+   - OperationPipeline
+   - Operations should act on generic targets, not hardcoded rows or columns.
+   - Implement concrete operations:
+     - SelectOperation
+     - RenameOperation
+     - FilterOperation
+     - RemoveOperation
+     - ExpressionOperation
+     - AggregateOperation
+     - JoinOperation
+     - SplitOperation
+     - SortOperation
+     - SampleOperation
+     - NormalizeOperation
+     - TypeCastOperation
+   - RemoveOperation should be able to remove fields or records depending on target_type.
+   - ExpressionOperation must safely add derived fields from inter-field mathematics.
+   - Do not use raw eval.
+
+4. Analyzer system
+   - BaseAnalyzer
+   - AnalysisResult
+   - AnalyzerRegistry
+   - AnalyzerEngine
+   - An analyzer is a function-like object that acts on a Source and outputs analysis.
+   - Analysis results must indicate whether they are graphable.
+   - Implement:
+     - SummaryAnalyzer
+     - TypeSimilarityAnalyzer
+     - CorrelationAnalyzer
+     - DistributionAnalyzer
+     - MissingnessAnalyzer
+     - TemporalSummaryAnalyzer
+     - SpatialSummaryAnalyzer
+     - TopologyAnalyzer
+
+5. View system
+   - BaseView
+   - ViewResult
+   - ViewRegistry
+   - ViewEngine
+   - Implement:
+     - SourcePreviewView
+     - DataTableView
+     - MetadataView
+     - SchemaView
+     - MappingView
+     - AnalysisView
+     - LineageView
+
+6. Visualization system
+   - BaseVisualizer
+   - VisualizationResult
+   - RoleBinding
+   - VisualizationRegistry
+   - VisualizationEngine
+   - Visualizers must use role bindings instead of hardcoded field names.
+   - Implement visualizers in app/visualization/methods/:
+     - ScatterVisualizer
+     - HeatmapVisualizer
+     - HistogramVisualizer
+     - CorrelationMatrixVisualizer
+     - TimeSeriesVisualizer
+     - LayeredMapVisualizer
+     - TopologyGraphVisualizer
+   - Visualizers should support pre-operations and output real artifact files.
+
+7. GIS and topology system
+   - BaseSpatialTool
+   - BaseTopologyTool
+   - SpatialRegistry
+   - SpatialEngine
+   - TopologyRegistry
+   - TopologyEngine
+   - Implement:
+     - GeometryConversionTool
+     - SpatialIntersectionTool
+     - NearestNeighborTool
+     - SpatialJoinTool
+     - AdjacencyGraphTool
+     - LayerRelationshipTool
+     - SpatialNetworkTool
+   - GIS dependencies must be optional.
+   - If geopandas or shapely are unavailable, return a clear error.
+
+8. Source API extensions
+   Add thin delegation methods to Source:
+   - map(mapping, **params)
+   - apply(operation, **params)
+   - analyze(analyzer, **params)
+   - view(view, **params)
+   - visualize(visualizer, **params)
+   - spatial(tool, **params)
+   - topology(tool, **params)
+   - derive(operation, source_key)
+
+9. Workflow API extensions
+   Extend app/workflow.py with:
+   - mapping()
+   - operation()
+   - operation_pipeline()
+   - analyzer()
+   - view()
+   - visualizer()
+   - spatial_tool()
+   - topology_tool()
+
+10. Real testing requirements
+   Tests must not be stub-only or fake tests.
+   Add real fixture-backed sources under tests/fixtures/sources/:
+   - fire_occurrences.csv
+   - landslides.csv
+   - population.csv
+   - polygons.geojson
+
+   Tests should create real SourceDefinition objects with connector_type="csv" or local GeoJSON where supported.
+   Tests should call actual public APIs like:
+   - source(SourceDefinition)
+   - fetch()
+   - map()
+   - apply()
+   - analyze()
+   - view()
+   - visualize()
+   - spatial()
+   - topology()
+
+   Do not only test isolated mocks. Use deterministic real local files.
+
+Preserve all existing behavior from the API guide:
+- source("key")
+- source(SourceDefinition)
+- add_source()
+- fetch()
+- run_meta_analysis()
+- run_meta_finder()
+- data_exporter().to_csv()
+- data_exporter().to_json()
+
+The goal is a scalable modular framework where mappings, operations, analyzers, views, visualizers, GIS tools, and topology tools are all plug-in components with shared validation, execution, results, metadata, and lineage.
+```
