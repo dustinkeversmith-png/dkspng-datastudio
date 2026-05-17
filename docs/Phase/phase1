@@ -1,0 +1,24 @@
+# Walkthrough: Phase 1 Core Component Foundation
+
+I have completed the Phase 1 implementation as requested, establishing the foundational infrastructure for the new generic components (Operations, Analyzers, Mappings, Views, GIS, Visualization) without breaking any existing workflow or Source logic.
+
+## 1. Added Core Abstract Systems
+Inside `app/core/`, I created the abstract contracts that will unify execution and validation across all future extensions:
+- **`component.py`**: Defines `BaseComponent` (`component_key`, `display_name`, `validate`, `execute`).
+- **`context.py`**: Defines `ExecutionContext` representing exactly the scope that execution engines will be handed (`source`, `mapping`, `metadata`, `params`).
+- **`result.py`**: Defines `ComponentResult`, standardizing the return structures of operations vs. visualizations vs. views.
+- **`validation.py`**: Defines the rigorous `ValidationResult` payload.
+- **`registry.py`**: Implements the plugin registration system (`ComponentRegistry`).
+- **`lineage.py`**: Helper definitions to map structural history mutations natively back to parent operations.
+- **`selectors.py`**: Created `select_source_dataframe`, a safe boundary layer fetching directly via the legacy `Source.fetch()` object.
+
+## 2. Integrated Test Suites
+I established a real, deterministically verifiable test environment using tangible datasets:
+1. Created `tests/fixtures/sources/` with structural CSV representations for `fire_occurrences.csv`, `landslides.csv`, and `population.csv`.
+2. Created a suite of 14 unit and integration tests inside `tests/test_core/` that specifically map and resolve components back to the real dataset instances. All tests passed correctly.
+
+> [!TIP]
+> Run the new test suite utilizing `python -m pytest tests/test_core` from the main project root!
+
+> [!NOTE]
+> The existing `Source` and legacy operations were untouched. This foundation guarantees forward compatibility so that future mapping, query, and analysis engines can simply inherit from `BaseComponent` and execute with guaranteed type safety against `ExecutionContext`.
