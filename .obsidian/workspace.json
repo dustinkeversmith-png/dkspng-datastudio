@@ -178,6 +178,7 @@
   },
   "active": "b2ee4da0d4fc1c16",
   "lastOpenFiles": [
+    "docs/session_log_metadata_pipeline.md",
     "artifacts/composite_relationship_matrix.csv",
     "artifacts/composite_dataset_overview.csv",
     "app/composite_source_analysis/__pycache__/__init__.cpython-312.pyc",
@@ -188,7 +189,6 @@
     "app/composite_source_analysis/__init__.py",
     "app/composite_source_analysis/integrator.py",
     "app/composite_source_analysis",
-    "metadata/bulk/regional_aggregate_impact_unified_meta.json",
     "metadata/bulk/regional_aggregate_impact_profile.md",
     "metadata/bulk/p22_table_01_h1b_visas_profile.md",
     "metadata/bulk/p19_table_01_emsi_postings_profile.md",
