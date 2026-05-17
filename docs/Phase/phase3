@@ -1,0 +1,32 @@
+# Walkthrough: Phase 1-3 Modular Component Foundation
+
+I have now completed Phase 1, Phase 2, and Phase 3 of the architectural rewrite. The framework is fully capable of dynamically defining semantic indices (`mappings`) and mutating data cleanly via tabular algorithms (`operations`) across deeply decoupled virtual interfaces.
+
+## 1. Phase 1: Core Abstract Systems
+Inside `app/core/`, I created the abstract contracts unifying execution and validation:
+- **`component.py`**: Defines `BaseComponent` (`component_key`, `display_name`, `validate`, `execute`).
+- **`context.py`**: Defines `ExecutionContext` representing the scope that execution engines handle (`source`, `mapping`, `metadata`, `params`).
+- **`result.py`**: Defines `ComponentResult`, standardizing returns.
+- **`validation.py`**: Defines `ValidationResult`.
+- **`lineage.py`**: Helpers mapping structural history mutations back to parent operations.
+- **`selectors.py`**: Exposes `select_source_dataframe`, a boundary layer pulling tabular patches via `Source.fetch()`.
+
+## 2. Phase 2: Generalized Mapping System
+Inside `app/mappings/`, I built the semantic layer replacing hardcoded row/col constraints:
+- **`mapping_targets.py`**: Enables tracking definitions across `field`, `record`, `dataset`, and `geometry`, attaching universal semantic `roles`.
+- **`rules/concrete_rules.py`**: Extensible rule pipeline providing dynamic mutations (`RenameRule`, `GeometryRoleRule`, etc.).
+- **`mapping_engine.py`**: Orchestrates `BaseMapping` rule sequencing to output a finalized `ResolvedMapping` index.
+
+## 3. Phase 3: Virtual Operation System
+Inside `app/operations/`, I created the engine that consumes semantic targets to dynamically rewrite DataFrames safely:
+- **`atomic/basic_operations.py`**: A robust suite of generalized operations (`SelectOperation`, `RenameOperation`, `FilterOperation`, `RemoveOperation`, `NormalizeOperation`, `ExpressionOperation`). These use `target_type` to ascertain if they should be dropping DataFrame columns vs filtering row metrics. `pandas.eval()` was hooked into `ExpressionOperation` to allow secure mathematical derivations.
+- **`pipelines/operation_pipeline.py`**: Allows users to batch multiple operations into a single pipelined Component Result, automatically appending cross-transformation lineage graphs to the output metadata.
+- **Source Method Subroutines**: Injected native delegation stubs into `Source` (`.map()`, `.apply()`, `.analyze()`, `.visualize()`). Most notably, `.derive()` was completed to execute operations and directly wrap the mutated result back into an analyzable `DerivedSource` wrapper subclass.
+
+## Integrated Test Suites
+Robust testing confirms architectural solidity without breaking standard endpoints:
+1. `tests/fixtures/sources/` hosts static CSV configurations.
+2. `tests/test_operations/` runs pipeline derivations on real file objects, evaluating `pandas` mutation outputs natively across `Filter`, `Select`, `Expression`, and `Pipeline` nodes.
+
+> [!TIP]
+> Run the full suite using `python -m pytest tests/`! You'll see 28 unified items across Core, Mappings, and Operations pass cleanly.

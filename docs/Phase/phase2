@@ -1,0 +1,31 @@
+# Walkthrough: Phase 1 & 2 Modular Component Foundation
+
+I have completed the Phase 1 and Phase 2 implementations, establishing the foundational infrastructure for the new generic components (Operations, Analyzers, Mappings, Views, GIS, Visualization) and the Generalized Mapping System without breaking any existing workflow or Source logic.
+
+## 1. Phase 1: Core Abstract Systems
+Inside `app/core/`, I created the abstract contracts that will unify execution and validation across all future extensions:
+- **`component.py`**: Defines `BaseComponent` (`component_key`, `display_name`, `validate`, `execute`).
+- **`context.py`**: Defines `ExecutionContext` representing exactly the scope that execution engines will be handed (`source`, `mapping`, `metadata`, `params`).
+- **`result.py`**: Defines `ComponentResult`, standardizing the return structures of operations vs. visualizations vs. views.
+- **`validation.py`**: Defines the rigorous `ValidationResult` payload.
+- **`registry.py`**: Implements the plugin registration system (`ComponentRegistry`).
+- **`lineage.py`**: Helper definitions to map structural history mutations natively back to parent operations.
+- **`selectors.py`**: Created `select_source_dataframe`, a safe boundary layer fetching directly via the legacy `Source.fetch()` object.
+
+## 2. Phase 2: Generalized Mapping System
+Inside `app/mappings/`, I built out the semantic mapping registry that replaces hardcoded row/column operations:
+- **`mapping_targets.py`**: Established the `MappingTarget` and `ResolvedMapping` structures. These enable tracking targets across granularities (`field`, `record`, `dataset`, `geometry`) and associating them with universal `roles` (like `spatial_y` or `administrative_boundary`).
+- **`rules/concrete_rules.py`**: Created an extensible rule system. I implemented `RenameRule`, `SemanticRoleRule`, `GeometryRoleRule`, and `TypeRoleRule` to dynamically mutate targeting parameters.
+- **`mapping_engine.py`**: Provides the `MappingEngine` capable of receiving a `BaseMapping` or a raw array of `BaseMappingRule`s, sequencing them, and returning a finalized `ResolvedMapping` catalog for subsequent pipelines to consume.
+
+## 3. Integrated Test Suites
+I established a real, deterministically verifiable test environment using tangible datasets:
+1. Created `tests/fixtures/sources/` with structural CSV representations for `fire_occurrences.csv`, `landslides.csv`, and `population.csv`.
+2. Created a suite of tests inside `tests/test_core/` that specifically map and resolve Phase 1 components back to the real dataset instances. 
+3. Created a suite of tests inside `tests/test_mappings/` that apply structural rules and query the semantic engine against these same real CSV models.
+
+> [!TIP]
+> Run the core and mappings test suites using `python -m pytest tests/`!
+
+> [!NOTE]
+> The existing `Source` and legacy operations remain entirely untouched. This foundation guarantees forward compatibility so that future operation engines and analyzers can simply ingest a `ResolvedMapping` and execute with guaranteed semantic intelligence against any tabular `Source`.
