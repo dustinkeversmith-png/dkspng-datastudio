@@ -29,25 +29,32 @@ class Connector(ABC):
         if not self.source.requires_download:
             return self.source.source_url
 
+        # Route ZIP archives through ZipExtractor so the connector always
+        # receives the path to the extracted inner file, not the raw ZIP.
+        url = self.source.source_url
+        if url.lower().split("?")[0].endswith(".zip"):
+            from app.connectors.zip_extractor import ZipExtractor
+            extractor = ZipExtractor(
+                url=url,
+                cache_key=self.source.source_key,
+                match_suffix=".csv",
+            )
+            return extractor.extract()
+
         local_path = self._get_local_download_path()
         if not os.path.exists(local_path):
-            print(f"Downloading dataset '{self.source.source_key}' from {self.source.source_url} ...")
+            print(f"Downloading dataset '{self.source.source_key}' from {url} ...")
             try:
-                # Add a simple user agent for sites that require it
-                req = urllib.request.Request(
-                    self.source.source_url, 
-                    headers={'User-Agent': 'Mozilla/5.0'}
-                )
-                with urllib.request.urlopen(req) as response, open(local_path, 'wb') as out_file:
-                    data = response.read()
-                    out_file.write(data)
+                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req) as response, open(local_path, "wb") as out_file:
+                    out_file.write(response.read())
                 print(f"Download complete: {local_path}")
             except Exception as e:
-                print(f"Failed to download {self.source.source_url}: {e}")
-                raise e
+                print(f"Failed to download {url}: {e}")
+                raise
         else:
             print(f"Using previously downloaded file for '{self.source.source_key}': {local_path}")
-        
+
         return local_path
 
     @abstractmethod

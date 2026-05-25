@@ -305,11 +305,11 @@ class Source:
             raise TypeError(f"Expected a Column object, got {type(column)}")
 
         target_list = list(target)
-        dst_key = target_list[0]
-        new_col_name = target_list[1] if len(target_list) > 1 else column.name
-
-        if dst_key not in self.dataframes:
-            raise KeyError(f"Target source '{dst_key}' not found")
+        # Identify the source key as whichever element exists in self.dataframes
+        dst_key = next((t for t in target_list if t in self.dataframes), None)
+        if dst_key is None:
+            raise KeyError(f"None of {target_list} matched a known sub-source")
+        new_col_name = next((t for t in target_list if t != dst_key), column.name)
 
         df = self.dataframes[dst_key]
         data = column.data.reset_index(drop=True)

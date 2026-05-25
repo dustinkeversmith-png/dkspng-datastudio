@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README_PHASE_2.md",
+                "file": "project_knowledge/Missions/Futuristic.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README_PHASE_2"
+              "title": "Futuristic"
             }
           }
         ]
@@ -182,18 +182,30 @@
   },
   "active": "b2ee4da0d4fc1c16",
   "lastOpenFiles": [
-    "test_scatter.png",
-    "test_chart.png",
-    "app/expressions/__pycache__/expr_parser.cpython-312.pyc",
-    "app/expressions/__pycache__/axis_expr.cpython-312.pyc",
-    "app/expressions/__pycache__",
-    "app/indexing/__pycache__/index_parser.cpython-312.pyc",
-    "app/indexing/__pycache__",
-    "app/mappings/__pycache__/column.cpython-312.pyc",
-    "app/analysis/__pycache__/results.cpython-312.pyc",
-    "app/analysis/__pycache__",
-    "app/visualizations/__pycache__/chart.cpython-312.pyc",
-    "tests/__pycache__/test_final_integration.cpython-312-pytest-8.3.5.pyc.6700",
+    "data/plots/eugene/bias_portal_odf_firestats_esttotalacres.png",
+    "data/plots/eugene/bias_epa_air_quality_AQI.png",
+    "data/plots/eugene/ci_grouped_all_sources.png",
+    "data/plots/eugene/cluster_map_combined.png",
+    "data/plots/eugene/scatter_within_noaa_gsod_noaa_gsod_PRCP__vs__noaa_gsod_VISIB.png",
+    "data/plots/eugene/scatter_within_noaa_gsod_noaa_gsod_GUST__vs__noaa_gsod_VISIB.png",
+    "data/plots/eugene/scatter_within_noaa_gsod_noaa_gsod_GUST__vs__noaa_gsod_PRCP.png",
+    "data/plots/eugene/scatter_within_noaa_gsod_noaa_gsod_TEMP__vs__noaa_gsod_VISIB.png",
+    "data/plots/eugene/scatter_within_noaa_gsod_noaa_gsod_TEMP__vs__noaa_gsod_PRCP.png",
+    "data/plots/eugene/scatter_within_noaa_gsod_noaa_gsod_TEMP__vs__noaa_gsod_GUST.png",
+    "data/plots/eugene/scatter_portal_odf_firestats_esttotalacres__vs__nifc_wildfire_incidents_IncidentSize.png",
+    "data/plots/eugene",
+    "data/plots/project2",
+    "data/plots/Grants Pass",
+    "project_2 copy.py",
+    "data/plots/project3/intersection_summary.csv",
+    "data/plots/project3/intersection_map.html",
+    "data/plots/project3",
+    "project_3.py",
+    "data/plots/project2/oldp2",
+    "data/plots/project2/New folder",
+    "docs/Project 2/implementation_plan.md",
+    "README_PHASE_2.md",
+    "project_knowledge/Missions/Futuristic.md",
     "README.md",
     "PHASE_4_USAGE_SNIPPET.md",
     "PHASE_3_USAGE_SNIPPET.md",

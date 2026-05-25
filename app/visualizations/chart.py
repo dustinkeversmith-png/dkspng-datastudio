@@ -1,23 +1,60 @@
 """Chart, VisualObject, and LegendObject — composable visual output objects."""
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 import pandas as pd
 
 if TYPE_CHECKING:
     from app.expressions.axis_expr import AxisExpr
+    from app.visualizations.hint import VisualHint
 
 
-@dataclass
 class LegendObject:
-    """Auto-generated legend entries for a Chart."""
-    entries: list[dict] = field(default_factory=list)
+    """Auto-generated legend entries for a Chart.
 
-    def add(self, label: str, color: str = "#888888", marker: str = "o"):
+    Supports imperative style overrides per field label:
+        legend.color("fire[burn_area]", "black")
+        legend.size("fire[burn_area]", "4px")
+        legend.opacity("fire[burn_area]", "0.5")
+    """
+
+    def __init__(self):
+        self.entries: list[dict] = []
+        self._styles: dict[str, dict[str, Any]] = {}   # label → {prop: val}
+
+    def add(self, label: str, color: str = "#888888", marker: str = "o") -> "LegendObject":
         self.entries.append({"label": label, "color": color, "marker": marker})
+        return self
+
+    # ------------------------------------------------------------------
+    # Imperative style setters
+    # ------------------------------------------------------------------
+
+    def color(self, label: str, value: str) -> "LegendObject":
+        """Set the colour of a legend entry by its label string."""
+        self._set_style(label, "color", value)
+        return self
+
+    def size(self, label: str, value: str) -> "LegendObject":
+        """Set the marker/line size (e.g. '4px', 12) of a legend entry."""
+        self._set_style(label, "size", value)
+        return self
+
+    def opacity(self, label: str, value: str | float) -> "LegendObject":
+        """Set the opacity of a legend entry (e.g. '0.5' or 0.5)."""
+        self._set_style(label, "opacity", float(value))
+        return self
+
+    def get_style(self, label: str) -> dict[str, Any]:
+        return self._styles.get(label, {})
+
+    def _set_style(self, label: str, prop: str, value: Any):
+        if label not in self._styles:
+            self._styles[label] = {}
+        self._styles[label][prop] = value
 
     def __repr__(self) -> str:
-        return f"LegendObject(entries={len(self.entries)})"
+        return f"LegendObject(entries={len(self.entries)}, styled={len(self._styles)})"
 
 
 @dataclass
@@ -38,6 +75,7 @@ class Chart:
         self.x_expr = x_expr
         self.y_expr = y_expr
         self._layers: list[dict] = []
+        self._hints: list["VisualHint"] = []
         self.legend = LegendObject()
 
     # ------------------------------------------------------------------
@@ -54,6 +92,29 @@ class Chart:
         """Overlay a scatter of arbitrary points (e.g. KNN cluster centres)."""
         self._layers.append({"type": "points", "data": points_df})
         self.legend.add("KNN Points", color="#4ECDC4", marker="x")
+        return self
+
+    def apply_hint(self, visual_hint: "VisualHint") -> "Chart":
+        """Attach a VisualHint to this chart.
+
+        Hints are consulted at save() time to:
+          - Apply legend style overrides (color, size, opacity) for matching fields
+          - Clip/reproject data to spatial bounds
+          - Tag geometry type for downstream GIS renderers
+          - Store projection / encoding program results in metadata
+        """
+        self._hints.append(visual_hint)
+
+        # Apply any style directives from the hint's _style dict to the legend now
+        for field_label, style_props in visual_hint._style.items():
+            for prop, val in style_props.items():
+                if prop == "color":
+                    self.legend.color(field_label, val)
+                elif prop == "size":
+                    self.legend.size(field_label, val)
+                elif prop == "opacity":
+                    self.legend.opacity(field_label, val)
+
         return self
 
     # ------------------------------------------------------------------

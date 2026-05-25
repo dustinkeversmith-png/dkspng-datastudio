@@ -1,0 +1,108 @@
+{
+    "fire": {
+        "source_key": "fire",
+        "source_url": "tests/fixtures/sources/fire_occurrences.csv",
+        "documentation_url": null,
+        "fetch_timestamp": "2026-05-18T19:39:31.008332",
+        "row_count": 4,
+        "columns": [
+            {
+                "name": "incident_id",
+                "inferred_type": "string",
+                "inferred_unit_tag": "unique_identifier",
+                "null_count": 0,
+                "unique_values": 4,
+                "human_description": null
+            },
+            {
+                "name": "incident_date",
+                "inferred_type": "datetime",
+                "inferred_unit_tag": "temporal",
+                "null_count": 0,
+                "unique_values": 4,
+                "human_description": null
+            },
+            {
+                "name": "latitude",
+                "inferred_type": "float",
+                "inferred_unit_tag": "decimal_degrees",
+                "null_count": 0,
+                "unique_values": 4,
+                "human_description": null
+            },
+            {
+                "name": "longitude",
+                "inferred_type": "float",
+                "inferred_unit_tag": "decimal_degrees",
+                "null_count": 0,
+                "unique_values": 4,
+                "human_description": null
+            },
+            {
+                "name": "acres_burned",
+                "inferred_type": "numeric",
+                "inferred_unit_tag": null,
+                "null_count": 0,
+                "unique_values": 4,
+                "human_description": null
+            },
+            {
+                "name": "fire_cause",
+                "inferred_type": "string",
+                "inferred_unit_tag": null,
+                "null_count": 0,
+                "unique_values": 3,
+                "human_description": null
+            },
+            {
+                "name": "county",
+                "inferred_type": "string",
+                "inferred_unit_tag": null,
+                "null_count": 0,
+                "unique_values": 2,
+                "human_description": null
+            }
+        ]
+    },
+    "pop": {
+        "source_key": "pop",
+        "source_url": "tests/fixtures/sources/population.csv",
+        "documentation_url": null,
+        "fetch_timestamp": "2026-05-18T19:39:31.008332",
+        "row_count": 3,
+        "columns": [
+            {
+                "name": "county",
+                "inferred_type": "string",
+                "inferred_unit_tag": null,
+                "null_count": 0,
+                "unique_values": 2,
+                "human_description": null
+            },
+            {
+                "name": "year",
+                "inferred_type": "datetime",
+                "inferred_unit_tag": "temporal",
+                "null_count": 0,
+                "unique_values": 2,
+                "human_description": null
+            },
+            {
+                "name": "population",
+                "inferred_type": "numeric",
+                "inferred_unit_tag": null,
+                "null_count": 0,
+                "unique_values": 3,
+                "human_description": null
+            },
+            {
+                "name": "population_density",
+                "inferred_type": "float",
+                "inferred_unit_tag": "decimal_degrees",
+                "null_count": 0,
+                "unique_values": 3,
+                "human_description": null
+            }
+        ]
+    }
+}

@@ -53,6 +53,9 @@ def register_three_portal_sources() -> None:
     )
 
 
+    
+
+
 def export_three_portals() -> None:
     """Wire a session to export three sources near Klamath Falls."""
     print("Registering sources...")

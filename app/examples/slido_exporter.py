@@ -11,6 +11,14 @@ from app.schemas import SourceDefinition
 from app.source_registry import add_or_update_source
 from app.workflow import data_exporter, source
 
+PORTAL_APIS = {
+    "odf_firestats": {
+        "open_data_csv": "https://data.oregon.gov/resource/fa7z-shhx.csv?%24limit=50000",
+    },
+    "sci_data_ics209": {
+        "csv_demo_surrogate": "https://data.oregon.gov/resource/fa7z-shhx.csv?%24limit=8000",
+    },
+}
 
 def register_slido_source() -> None:
     """Upsert registry entry pointing at live ArcGIS API."""

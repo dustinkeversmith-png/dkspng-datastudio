@@ -23,6 +23,7 @@ from app.workflow.source_binding import source, Source
 from app.schemas import SourceDefinition
 from app.operations.data_ops import check_base_types
 from app.visualizations.chart import VisualObject, LegendObject
+from app.visualizations.hint import hint, VisualHint
 from app.analysis.results import RegressionResult, KNNResult
 from app.mappings.column import Column
 
@@ -176,6 +177,12 @@ def test_final_integration(fire_def, pop_def):
     # AxisExpr-based bar chart (implied axis from SourceProxy)
     chart = s_sub.bar(s_sub["fire"]["burn_area"], s_sub["fire"]["lat"])
 
+
+    # automatically updating the legend
+    chart.legend.color("fire[burn_area]", "black")
+    chart.legend.size("fire[burn_area]", "4px")
+    chart.legend.opacity("fire[burn_area]", "0.5")
+
     # Overlay regression line and KNN points
     chart.linefn(reg.weights, reg.bias)
     chart.points(knn_result.points)
@@ -192,6 +199,41 @@ def test_final_integration(fire_def, pop_def):
     )
     scatter_obj = scatter_chart.save("test_scatter.png")
     assert isinstance(scatter_obj, VisualObject)
+
+    # Adding visual hints for categorical variables
+    # hint(sources, fields) → VisualHint
+    vishint = hint({"fire", "pop"}, {"fire_type"})
+    assert isinstance(vishint, VisualHint)
+
+    # Tag the geometry type for spatial rendering
+    vishint.geo("polygon")
+    assert vishint._geo == "polygon"
+
+    # Spatial bounding box — accepts AxisExpr .min()/.max() calls
+    vishint.bounds(
+        s_sub["fire"]["lat"].min(),
+        s_sub["fire"]["lat"].max(),
+        s_sub["fire"]["longitude"].min(),
+        s_sub["fire"]["longitude"].max(),
+    )
+    assert vishint._bounds is not None
+
+    # Micro-DSL programs — projection and categorical encoding
+    vishint.projection(
+        "i",
+        "for(e=input.dim(),2), i[0] /= i[e], i[1] / i[e]",
+    )
+    vishint.encode(
+        "i",
+        "i.catcode / input.dim()",
+    )
+    assert len(vishint._programs) == 2
+    assert vishint._programs[0]["kind"] == "projection"
+    assert vishint._programs[1]["kind"] == "encode"
+
+    # Attach the hint to the chart before save
+    chart.apply_hint(vishint)
+    assert len(chart._hints) == 1
 
     # GIS Tool (kept for spatial verification)
     from app.gis_tools.topological import intersection_buffer
