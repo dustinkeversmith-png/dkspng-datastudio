@@ -13,17 +13,14 @@ Phase 1 creates the ingestion backend for Oregon regional datasets.
 - CLI ingestion runner
 - Docker Compose for PostgreSQL + PostGIS
 
-## Quick start
+# Phase 1 usage snippet
+
+## 2. Install and run the backend
 
 ```bash
-cd regional-data-studio-phase1
-
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-
-docker compose up -d
-
 copy .env.example .env
 
 python -m app.cli sources
@@ -32,10 +29,11 @@ python -m app.cli ingest generic_csv_sample
 uvicorn app.main:app --reload
 ```
 
-Open:
+## 5. Open the dashboard
 
-```text
-http://127.0.0.1:8000/docs
+```bash
+cd apps/web-dashboard
+npm install
+npm run dev
 ```
 
-The ODF and SLIDO entries are intentionally configured with placeholder URLs until you paste in the exact ArcGIS REST query endpoint.

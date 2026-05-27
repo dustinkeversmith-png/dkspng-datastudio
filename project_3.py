@@ -102,9 +102,9 @@ OREGON_COUNTY_CENTROIDS: dict[str, tuple[float, float]] = {
 # Source registration (mirrors project_2)
 # ---------------------------------------------------------------------------
 
-from app.schemas import SourceDefinition
-from app.source_registry import add_or_update_source, get_source
-from app.workflow.source_binding import source as make_source
+from backend.schemas import SourceDefinition
+from backend.source_registry import add_or_update_source, get_source
+from backend.workflow.source_binding import source as make_source
 
 
 def register_sources() -> None:

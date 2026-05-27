@@ -1,5 +1,0 @@
-incident_id,incident_date,latitude,longitude,acres_burned,fire_cause,county
-F001,2020-08-01,42.21,-121.77,12.5,Lightning,Klamath
-F002,2020-08-03,42.25,-121.70,0.5,Human,Klamath
-F003,2021-07-19,42.40,-121.90,55.0,Lightning,Lake
-F004,2021-09-02,42.10,-121.60,8.0,Unknown,Klamath

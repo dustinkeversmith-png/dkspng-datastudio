@@ -20,9 +20,9 @@ from typing import Any
 
 import pandas as pd
 
-from app.schemas import SourceDefinition
-from app.source_registry import add_or_update_source, get_source
-from app.workflow.source_binding import source as make_source
+from backend.schemas import SourceDefinition
+from backend.source_registry import add_or_update_source, get_source
+from backend.workflow.source_binding import source as make_source
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -210,7 +210,7 @@ _ALL_SOURCE_KEYS = [
 
 def test_all_sources() -> tuple[list[dict[str, Any]], dict[str, pd.DataFrame]]:
     """Fetch and metadata-profile each source. Return (report_list, dataframes_dict)."""
-    from app.metadata_analyzer.analyzer import MetadataAnalyzer
+    from backend.metadata_analyzer.analyzer import MetadataAnalyzer
 
     combined: list[dict[str, Any]] = []
     dataframes: dict[str, pd.DataFrame] = {}
@@ -264,7 +264,7 @@ def test_all_sources() -> tuple[list[dict[str, Any]], dict[str, pd.DataFrame]]:
 # ---------------------------------------------------------------------------
 
 def run_sampling_analysis(dataframes: dict[str, pd.DataFrame]) -> list[dict[str, Any]]:
-    from app.sampling.sampling_engine import SamplingEngine
+    from backend.sampling.sampling_engine import SamplingEngine
 
     sampling_records: list[dict[str, Any]] = []
 
@@ -327,8 +327,8 @@ def fuse_sources(dataframes: dict[str, pd.DataFrame]) -> pd.DataFrame:
 
 
 def run_knn(df: pd.DataFrame) -> Any:
-    from app.neighbors.neighbor_engine import NeighborEngine
-    from app.neighbors.spatial_temporal_distance import infer_stkey
+    from backend.neighbors.neighbor_engine import NeighborEngine
+    from backend.neighbors.spatial_temporal_distance import infer_stkey
 
     # Here the goal is to pass it specific keys in which to measure distances too, for example
     # You would say
@@ -345,7 +345,7 @@ def run_knn(df: pd.DataFrame) -> Any:
 
 
 def run_kmeans(df: pd.DataFrame, k: int = 6) -> Any:
-    from app.clustering.cluster_engine import ClusterEngine
+    from backend.clustering.cluster_engine import ClusterEngine
 
     print("\n=== KMeans Clustering ===")
     if df.empty:
@@ -361,8 +361,8 @@ def run_kmeans(df: pd.DataFrame, k: int = 6) -> Any:
 # ---------------------------------------------------------------------------
 
 def run_cross_analysis(dataframes: dict[str, pd.DataFrame]) -> Any:
-    from app.cross_analysis.cross_analysis_spec import CrossAnalysisSpec
-    from app.cross_analysis.cross_analysis_engine import CrossAnalysisEngine
+    from backend.cross_analysis.cross_analysis_spec import CrossAnalysisSpec
+    from backend.cross_analysis.cross_analysis_engine import CrossAnalysisEngine
 
     print("\n=== Cross-Source Analysis ===")
     combined_df = fuse_sources(dataframes)
@@ -400,7 +400,7 @@ def run_cross_analysis(dataframes: dict[str, pd.DataFrame]) -> Any:
 # ---------------------------------------------------------------------------
 
 def run_whole_group_analysis(dataframes: dict[str, pd.DataFrame]) -> list[dict[str, Any]]:
-    from app.models.model_engine import ModelEngine
+    from backend.models.model_engine import ModelEngine
 
     print("\n=== Whole-Group Analysis ===")
     results: list[dict[str, Any]] = []
@@ -440,7 +440,7 @@ def run_whole_group_analysis(dataframes: dict[str, pd.DataFrame]) -> list[dict[s
 
 def generate_distribution_plots(dataframes: dict[str, pd.DataFrame]) -> list[str]:
     """One summary figure per source (hist + box for each numeric variable)."""
-    from app.advanced_plots.plot_engine import source_summary_plot
+    from backend.advanced_plots.plot_engine import source_summary_plot
 
     print("\n=== Distribution Summary Plots ===")
     os.makedirs(PLOT_DIR, exist_ok=True)
@@ -475,7 +475,7 @@ def generate_cross_correlation_plots(dataframes: dict[str, pd.DataFrame]) -> lis
       2. Build a cross-source correlation matrix from aggregated statistics.
       3. Plot scatter + regression for every cross-source variable pair.
     """
-    from app.advanced_plots.plot_engine import (
+    from backend.advanced_plots.plot_engine import (
         cross_correlation_heatmap, all_pairs_scatter_grid, cross_variable_scatter,
     )
     import numpy as np
@@ -630,7 +630,7 @@ def generate_cluster_plots(
     df: pd.DataFrame,
     cluster_result: Any,
 ) -> list[str]:
-    from app.advanced_plots.plot_engine import cluster_map
+    from backend.advanced_plots.plot_engine import cluster_map
 
     paths: list[str] = []
     if cluster_result is None or df.empty:
@@ -658,7 +658,7 @@ def generate_cluster_plots(
 # ---------------------------------------------------------------------------
 
 def generate_sampling_plots(sampling_records: list[dict[str, Any]]) -> list[str]:
-    from app.advanced_plots.plot_engine import (
+    from backend.advanced_plots.plot_engine import (
         confidence_interval_plot_grouped, sampling_bias_plot,
     )
 
@@ -722,8 +722,8 @@ def generate_visual_descriptors(
     cluster_result: Any,
     sampling_records: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    from app.visual_ops.neural_descriptor_generator import NeuralDescriptorGenerator
-    from app.models.model_result import ModelResult
+    from backend.visual_ops.neural_descriptor_generator import NeuralDescriptorGenerator
+    from backend.models.model_result import ModelResult
 
     gen = NeuralDescriptorGenerator()
     descriptors: list[dict[str, Any]] = []
